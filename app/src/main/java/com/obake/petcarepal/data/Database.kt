@@ -1,21 +1,11 @@
 package com.obake.petcarepal.data
 
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.obake.petcarepal.data.daos.PetDao
+import com.obake.petcarepal.data.models.Pet
 
-class Database(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    companion object {
-        private const val DATABASE_NAME = "petcarepal.db"
-        private const val DATABASE_VERSION = 1
-    }
-
-    override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE pets (id INTEGER PRIMARY KEY, name TEXT, type TEXT, date DATE, imageUrl TEXT)")
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS pets")
-        onCreate(db)
-    }
+@Database(entities = [Pet::class], version = 2)
+abstract class Database: RoomDatabase() {
+    abstract fun petDao(): PetDao
 }
