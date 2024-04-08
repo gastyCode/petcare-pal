@@ -1,7 +1,7 @@
 package com.obake.petcarepal.data.repository
 
-import com.obake.petcarepal.data.daos.PetDao
-import com.obake.petcarepal.data.models.Pet
+import com.obake.petcarepal.data.dao.PetDao
+import com.obake.petcarepal.data.model.Pet
 
 class PetRepository(private val petDao: PetDao) {
     suspend fun save(name: String, type: String, date: String, imageUrl: String) {

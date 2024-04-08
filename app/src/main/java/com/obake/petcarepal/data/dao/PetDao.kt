@@ -1,10 +1,10 @@
-package com.obake.petcarepal.data.daos
+package com.obake.petcarepal.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.obake.petcarepal.data.models.Pet
+import com.obake.petcarepal.data.model.Pet
 
 @Dao
 interface PetDao {

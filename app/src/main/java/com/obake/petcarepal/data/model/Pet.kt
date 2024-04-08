@@ -1,4 +1,4 @@
-package com.obake.petcarepal.data.models
+package com.obake.petcarepal.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

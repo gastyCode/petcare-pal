@@ -5,9 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,8 +25,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.obake.petcarepal.data.models.NavigationItem
+import com.obake.petcarepal.data.model.NavigationItem
 import com.obake.petcarepal.ui.OverviewScreen
+import com.obake.petcarepal.ui.TipsScreen
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 
 class MainActivity : ComponentActivity() {
@@ -61,7 +59,7 @@ class MainActivity : ComponentActivity() {
                                 OverviewScreen(modifier = Modifier.padding(padding))
                             }
                             composable("Tips") {
-                                OverviewScreen(modifier = Modifier.padding(padding))
+                                TipsScreen(modifier = Modifier.padding(padding))
                             }
                         }
                     }
