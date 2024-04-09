@@ -26,6 +26,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.obake.petcarepal.data.model.NavigationItem
+import com.obake.petcarepal.ui.ActivitiesScreen
+import com.obake.petcarepal.ui.CalendarScreen
 import com.obake.petcarepal.ui.OverviewScreen
 import com.obake.petcarepal.ui.TipsScreen
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
@@ -53,10 +55,10 @@ class MainActivity : ComponentActivity() {
                                 OverviewScreen(modifier = Modifier.padding(padding))
                             }
                             composable("Activities") {
-                                OverviewScreen(modifier = Modifier.padding(padding))
+                                ActivitiesScreen(modifier = Modifier.padding(padding))
                             }
                             composable("Calendar") {
-                                OverviewScreen(modifier = Modifier.padding(padding))
+                                CalendarScreen(modifier = Modifier.padding(padding))
                             }
                             composable("Tips") {
                                 TipsScreen(modifier = Modifier.padding(padding))
@@ -107,7 +109,7 @@ fun DefaultPreview() {
             ) { padding ->
                 NavHost(navController = navController, startDestination = "Landing") {
                     composable("Landing") {
-                        OverviewScreen(modifier = Modifier.padding(padding))
+                        ActivitiesScreen(modifier = Modifier.padding(padding))
                     }
                 }
             }
