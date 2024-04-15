@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">PetCare Pal</string>
+    <string name="next_tip">Next Tip</string>
+    <string name="previous_tip">Previous Tip</string>
+    <string name="add_activity">Add Activity</string>
 </resources>

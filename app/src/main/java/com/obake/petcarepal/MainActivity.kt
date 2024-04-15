@@ -25,7 +25,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.obake.petcarepal.data.model.NavigationItem
+import com.obake.petcarepal.data.model.NavigationScreens
 import com.obake.petcarepal.ui.ActivitiesScreen
 import com.obake.petcarepal.ui.CalendarScreen
 import com.obake.petcarepal.ui.OverviewScreen
@@ -50,17 +50,17 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) { padding ->
-                        NavHost(navController = navController, startDestination = "Home") {
-                            composable("Home") {
+                        NavHost(navController = navController, startDestination = NavigationScreens.Home.name) {
+                            composable(NavigationScreens.Home.name) {
                                 OverviewScreen(modifier = Modifier.padding(padding))
                             }
-                            composable("Activities") {
+                            composable(NavigationScreens.Activities.name) {
                                 ActivitiesScreen(modifier = Modifier.padding(padding))
                             }
-                            composable("Calendar") {
+                            composable(NavigationScreens.Calendar.name) {
                                 CalendarScreen(modifier = Modifier.padding(padding))
                             }
-                            composable("Tips") {
+                            composable(NavigationScreens.Tips.name) {
                                 TipsScreen(modifier = Modifier.padding(padding))
                             }
                         }
@@ -76,14 +76,14 @@ fun Navigation(navController: NavController) {
     var selectedItem by remember { mutableIntStateOf(0) }
 
     NavigationBar {
-        NavigationItem.items.forEachIndexed { index, item ->
+        NavigationScreens.entries.forEachIndexed { index, screen ->
             NavigationBarItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(item.title) },
+                icon = { Icon(painterResource(id = screen.icon), contentDescription = screen.name) },
+                label = { Text(screen.name) },
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
-                    navController.navigate(item.route)
+                    navController.navigate(screen.name)
                 }
             )
         }
