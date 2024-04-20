@@ -1,4 +1,4 @@
-package com.obake.petcarepal.data.model
+package com.obake.petcarepal.data
 
 import com.obake.petcarepal.R
 

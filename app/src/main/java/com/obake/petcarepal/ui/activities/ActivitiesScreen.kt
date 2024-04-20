@@ -1,4 +1,4 @@
-package com.obake.petcarepal.ui
+package com.obake.petcarepal.ui.activities
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

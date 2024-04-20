@@ -1,4 +1,4 @@
-package com.obake.petcarepal.ui
+package com.obake.petcarepal.ui.overview
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -21,6 +21,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,18 +32,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
+import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
-import java.sql.Date
 
 @Composable
-fun OverviewScreen(modifier: Modifier = Modifier) {
+fun OverviewScreen(overviewViewModel: OverviewViewModel, modifier: Modifier = Modifier) {
+    val pets: State<List<Pet>?> = overviewViewModel.pets.observeAsState()
+    val pet = pets.value?.getOrNull(0)
+
     Box(modifier = Modifier.then(modifier)) {
-        PetOverview("Bady", "Dog", Date(103, 4, 6), R.drawable.ic_launcher_background)
+        pet?.name?.let { PetOverview(it, pet.type, pet.date, R.drawable.ic_launcher_background) }
     }
 }
 
 @Composable
-fun PetOverview(name: String, type: String, date: Date, @DrawableRes image: Int, modifier: Modifier = Modifier) {
+fun PetOverview(name: String, type: String, date: String, @DrawableRes image: Int, modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +69,7 @@ fun PetOverview(name: String, type: String, date: Date, @DrawableRes image: Int,
 }
 
 @Composable
-fun PetStats(name: String, type: String, date: Date) {
+fun PetStats(name: String, type: String, date: String) {
     Column(
         modifier = Modifier
             .padding(0.dp, 8.dp)
@@ -88,7 +93,7 @@ fun PetStats(name: String, type: String, date: Date) {
                 iconColor = MaterialTheme.colorScheme.onPrimary
             )
             PetStatIcon(
-                text = date.toString(),
+                text = date,
                 icon = Icons.Rounded.DateRange,
                 color = MaterialTheme.colorScheme.primary,
                 iconColor = MaterialTheme.colorScheme.onPrimary
@@ -127,6 +132,5 @@ fun PetStatIcon(text: String, icon: ImageVector, color: Color, iconColor: Color,
 @Composable
 fun OverviewScreenPreview() {
     PetCarePalTheme {
-        OverviewScreen()
     }
 }

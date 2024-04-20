@@ -25,16 +25,25 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.obake.petcarepal.data.model.NavigationScreens
-import com.obake.petcarepal.ui.ActivitiesScreen
-import com.obake.petcarepal.ui.CalendarScreen
-import com.obake.petcarepal.ui.OverviewScreen
-import com.obake.petcarepal.ui.TipsScreen
+import com.obake.petcarepal.data.AppDatabase
+import com.obake.petcarepal.data.NavigationScreens
+import com.obake.petcarepal.ui.activities.ActivitiesScreen
+import com.obake.petcarepal.ui.calendar.CalendarScreen
+import com.obake.petcarepal.ui.overview.OverviewScreen
+import com.obake.petcarepal.ui.tips.TipsScreen
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
+import com.obake.petcarepal.ui.overview.OverviewViewModel
 
 class MainActivity : ComponentActivity() {
+    private lateinit var overviewViewModel: OverviewViewModel
+    private lateinit var appDatabase: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        appDatabase = AppDatabase.getDatabase(applicationContext)
+        overviewViewModel = OverviewViewModel(appDatabase.petDao())
+
         setContent {
             PetCarePalTheme {
                 // A surface container using the 'background' color from the theme
@@ -52,7 +61,7 @@ class MainActivity : ComponentActivity() {
                     ) { padding ->
                         NavHost(navController = navController, startDestination = NavigationScreens.Home.name) {
                             composable(NavigationScreens.Home.name) {
-                                OverviewScreen(modifier = Modifier.padding(padding))
+                                OverviewScreen(overviewViewModel, modifier = Modifier.padding(padding))
                             }
                             composable(NavigationScreens.Activities.name) {
                                 ActivitiesScreen(modifier = Modifier.padding(padding))
