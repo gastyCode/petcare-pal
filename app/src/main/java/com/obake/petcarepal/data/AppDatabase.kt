@@ -7,8 +7,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.obake.petcarepal.R
+import com.obake.petcarepal.data.dao.ActivityDao
 import com.obake.petcarepal.data.dao.PetDao
 import com.obake.petcarepal.data.dao.TipDao
+import com.obake.petcarepal.data.model.Activity
 import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.data.model.Tip
 import kotlinx.coroutines.CoroutineScope
@@ -16,10 +18,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-@Database(entities = [Pet::class, Tip::class], version = 1)
+@Database(entities = [Pet::class, Tip::class, Activity::class], version = 2)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun petDao(): PetDao
     abstract fun tipDao(): TipDao
+    abstract fun activityDao(): ActivityDao
 
     companion object {
         @Volatile

@@ -28,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.obake.petcarepal.data.AppDatabase
 import com.obake.petcarepal.data.NavigationScreens
 import com.obake.petcarepal.ui.activities.ActivitiesScreen
+import com.obake.petcarepal.ui.activities.ActivitiesViewModel
 import com.obake.petcarepal.ui.calendar.CalendarScreen
 import com.obake.petcarepal.ui.overview.OverviewScreen
 import com.obake.petcarepal.ui.tips.TipsScreen
@@ -38,6 +39,7 @@ import com.obake.petcarepal.ui.tips.TipsViewModel
 class MainActivity : ComponentActivity() {
     private lateinit var appDatabase: AppDatabase
     private lateinit var overviewViewModel: OverviewViewModel
+    private lateinit var activitiesViewModel: ActivitiesViewModel
     private lateinit var tipsViewModel: TipsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +47,7 @@ class MainActivity : ComponentActivity() {
 
         appDatabase = AppDatabase.getDatabase(applicationContext)
         overviewViewModel = OverviewViewModel(appDatabase.petDao())
+        activitiesViewModel = ActivitiesViewModel(appDatabase.activityDao())
         tipsViewModel = TipsViewModel(appDatabase.tipDao())
 
         setContent {
@@ -67,7 +70,7 @@ class MainActivity : ComponentActivity() {
                                 OverviewScreen(overviewViewModel, modifier = Modifier.padding(padding))
                             }
                             composable(NavigationScreens.Activities.name) {
-                                ActivitiesScreen(modifier = Modifier.padding(padding))
+                                ActivitiesScreen(activitiesViewModel, modifier = Modifier.padding(padding))
                             }
                             composable(NavigationScreens.Calendar.name) {
                                 CalendarScreen(modifier = Modifier.padding(padding))
@@ -106,25 +109,6 @@ fun Navigation(navController: NavController) {
 @Composable
 fun DefaultPreview() {
     PetCarePalTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            val navController = rememberNavController()
-            Scaffold(
-                bottomBar = {
-                    BottomAppBar {
 
-                    }
-                }
-            ) { padding ->
-                NavHost(navController = navController, startDestination = "Landing") {
-                    composable("Landing") {
-                        ActivitiesScreen(modifier = Modifier.padding(padding))
-                    }
-                }
-            }
-        }
     }
 }

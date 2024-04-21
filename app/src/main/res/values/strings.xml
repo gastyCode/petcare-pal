@@ -3,4 +3,7 @@
     <string name="next_tip">Next Tip</string>
     <string name="previous_tip">Previous Tip</string>
     <string name="add_activity">Add Activity</string>
+    <string name="remove">Remove</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
 </resources>

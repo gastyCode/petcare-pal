@@ -11,9 +11,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -28,33 +29,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
+import com.obake.petcarepal.data.model.Activity
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
-
-data class Activity(val text: String, val type: String, val date: String, val icon: ImageVector)
+import java.util.Date
 
 @Composable
-fun ActivitiesScreen(modifier: Modifier = Modifier) {
-    val list = mutableListOf(
-        Activity("Activity 1", "Feed", "12:00", Icons.Rounded.Info),
-        Activity("Activity 2", "Walk", "13:00", Icons.Rounded.Info),
-        Activity("Activity 3", "Feed", "14:00", Icons.Rounded.Info),
-        Activity("Activity 4", "Walk", "15:00", Icons.Rounded.Info),
-        Activity("Activity 5", "Feed", "16:00", Icons.Rounded.Info),
-        Activity("Activity 6", "Walk", "17:00", Icons.Rounded.Info),
-        Activity("Activity 7", "Feed", "18:00", Icons.Rounded.Info),
-        Activity("Activity 8", "Walk", "19:00", Icons.Rounded.Info),
-        Activity("Activity 9", "Feed", "20:00", Icons.Rounded.Info),
-        Activity("Activity 10", "Walk", "21:00", Icons.Rounded.Info),
-    )
+fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = Modifier) {
+    val list = activitiesViewModel.state.activities
 
     Box(
         modifier = Modifier.then(modifier)
     ) {
+        AddActivityDialog(openDialog = activitiesViewModel.state.openDialog, onAdd = { activitiesViewModel.insert(
+            Activity(0, "Activity", 100000)
+        ) }, onDismiss = activitiesViewModel::toggleDialog)
         Column(
             modifier = Modifier.then(modifier),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ActivityList(list = list)
+            ActivityList(activitiesViewModel = activitiesViewModel)
         }
 
         BottomAppBar(
@@ -66,7 +59,7 @@ fun ActivitiesScreen(modifier: Modifier = Modifier) {
                     .align(Alignment.CenterVertically)
             ) {
                 AddActivityButton(
-                    {  },
+                    onClick = activitiesViewModel::toggleDialog,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
@@ -88,24 +81,25 @@ fun AddActivityButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
                 text = stringResource(id = R.string.add_activity),
                 style = MaterialTheme.typography.titleMedium
             )
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Add Activity")
+            Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.add_activity))
         }
     }
 }
 
 @Composable
-fun ActivityList(list: List<Activity>, modifier: Modifier = Modifier) {
+fun ActivityList(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = Modifier) {
+    val list = activitiesViewModel.state.activities
+
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(list) { activity ->
             ActivityCard(
-                text = activity.text,
-                type = activity.type,
-                date = activity.date,
-                icon = activity.icon,
-                onRemove = {},
+                name = activity.name,
+                time = Date(activity.time * 1000).toString(),
+                icon = Icons.Default.AccountCircle,
+                onRemove = { activitiesViewModel.delete(activity) },
                 modifier = modifier
             )
         }
@@ -113,7 +107,7 @@ fun ActivityList(list: List<Activity>, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ActivityCard(text: String, type: String, date: String, icon: ImageVector, onRemove: () -> Unit, modifier: Modifier = Modifier) {
+fun ActivityCard(name: String, time: String, icon: ImageVector, onRemove: () -> Unit, modifier: Modifier = Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -131,26 +125,48 @@ fun ActivityCard(text: String, type: String, date: String, icon: ImageVector, on
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = type,
+                    contentDescription = null,
                     modifier = Modifier
                         .size(48.dp)
                         .padding(end = 8.dp)
                 )
                 Column {
                     Text(
-                        text = text,
+                        text = name,
                         style = MaterialTheme.typography.headlineSmall
                     )
                     Text(
-                        text = date,
+                        text = time,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
             Button(onClick = onRemove) {
-                Icon(imageVector = Icons.Default.Clear, contentDescription = "Remove")
+                Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(id = R.string.remove))
             }
         }
+    }
+}
+
+@Composable
+fun AddActivityDialog(
+    openDialog: Boolean,
+    onAdd: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    if (openDialog) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            dismissButton = {
+                Button(onClick = onDismiss) {
+                    Text(text = stringResource(id = R.string.cancel))
+                } },
+            confirmButton = {
+                Button(onClick = onAdd) {
+                    Text(text = stringResource(id = R.string.add))
+                } },
+            title = { Text(text = stringResource(id = R.string.add_activity)) }
+        )
     }
 }
 
@@ -158,6 +174,5 @@ fun ActivityCard(text: String, type: String, date: String, icon: ImageVector, on
 @Composable
 fun ActivitiesScreenPreview() {
     PetCarePalTheme {
-        ActivitiesScreen()
     }
 }
