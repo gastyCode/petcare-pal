@@ -6,19 +6,19 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.obake.petcarepal.data.model.Pet
+import com.obake.petcarepal.data.model.Tip
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PetDao {
+interface TipDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(pet: Pet)
+    suspend fun insert(tip: Tip)
     @Update
-    suspend fun update(pet: Pet)
+    suspend fun update(tip: Tip)
     @Delete
-    suspend fun delete(pet: Pet)
-    @Query("SELECT * FROM pets WHERE pet_id = :id")
-    fun get(id: Long): Flow<Pet>
-    @Query("SELECT * FROM pets")
-    fun getAll(): Flow<List<Pet>>
+    suspend fun delete(tip: Tip)
+    @Query("SELECT * FROM tips WHERE tip_id = :id")
+    fun get(id: Long): Flow<Tip>
+    @Query("SELECT * FROM tips")
+    fun getAll(): Flow<List<Tip>>
 }

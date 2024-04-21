@@ -20,21 +20,23 @@ import com.obake.petcarepal.R
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 
 @Composable
-fun TipsScreen(modifier: Modifier = Modifier) {
+fun TipsScreen(tipsViewModel: TipsViewModel, modifier: Modifier = Modifier) {
+    val tip = tipsViewModel.state.currentTip
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
             .then(modifier)
     ) {
-        TipCard(title = "Hello.", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at magna a ante tempus rutrum." +
-                "Nam condimentum, ligula vestibulum hendrerit pretium, nulla ligula elementum sapien, facilisis ornare sem ante id ipsum. Aenean " +
-                "consequat nibh ut ante consectetur, id faucibus arcu elementum. Donec ultrices condimentum sapien, sit amet molestie enim laoreet")
+        tip?.let {
+            TipCard(title = it.title, description = it.description, tipsViewModel::nextTip, tipsViewModel::previousTip)
+        }
     }
 }
 
 @Composable
-fun TipCard(title: String, description: String, modifier: Modifier = Modifier) {
+fun TipCard(title: String, description: String, onNext: () -> Unit, onPrevious: () -> Unit, modifier: Modifier = Modifier) {
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -62,13 +64,13 @@ fun TipCard(title: String, description: String, modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = onPrevious,
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(text = stringResource(id = R.string.previous_tip))
                     }
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = onNext,
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(text = stringResource(id = R.string.next_tip))
@@ -82,7 +84,5 @@ fun TipCard(title: String, description: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun TipsScreenPreview() {
-    PetCarePalTheme {
-        TipsScreen()
-    }
+    PetCarePalTheme {}
 }

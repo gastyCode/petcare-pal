@@ -33,16 +33,19 @@ import com.obake.petcarepal.ui.overview.OverviewScreen
 import com.obake.petcarepal.ui.tips.TipsScreen
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.ui.overview.OverviewViewModel
+import com.obake.petcarepal.ui.tips.TipsViewModel
 
 class MainActivity : ComponentActivity() {
-    private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var appDatabase: AppDatabase
+    private lateinit var overviewViewModel: OverviewViewModel
+    private lateinit var tipsViewModel: TipsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         appDatabase = AppDatabase.getDatabase(applicationContext)
         overviewViewModel = OverviewViewModel(appDatabase.petDao())
+        tipsViewModel = TipsViewModel(appDatabase.tipDao())
 
         setContent {
             PetCarePalTheme {
@@ -70,7 +73,7 @@ class MainActivity : ComponentActivity() {
                                 CalendarScreen(modifier = Modifier.padding(padding))
                             }
                             composable(NavigationScreens.Tips.name) {
-                                TipsScreen(modifier = Modifier.padding(padding))
+                                TipsScreen(tipsViewModel, modifier = Modifier.padding(padding))
                             }
                         }
                     }

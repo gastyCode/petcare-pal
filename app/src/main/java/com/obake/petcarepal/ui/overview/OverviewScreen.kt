@@ -41,7 +41,9 @@ fun OverviewScreen(overviewViewModel: OverviewViewModel, modifier: Modifier = Mo
     val pet = pets.value?.getOrNull(0)
 
     Box(modifier = Modifier.then(modifier)) {
-        pet?.name?.let { PetOverview(it, pet.type, pet.date, R.drawable.ic_launcher_background) }
+        pet?.name?.let {
+            PetOverview(it, pet.type, pet.date, R.drawable.ic_launcher_background)
+        }
     }
 }
 

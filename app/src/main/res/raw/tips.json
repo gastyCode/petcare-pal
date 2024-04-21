@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "title": "Start Training Early",
+    "description": "Puppies are eager to learn, so begin training basic commands like sit, stay, and come as soon as you bring them home. Positive reinforcement with treats and praise is key to successful training."
+  },
+  {
+    "id": 2,
+    "title": "Provide Proper Exercise",
+    "description": "The amount of exercise your dog needs depends on their breed, age, and overall health. Daily walks, playtime, and mental stimulation are crucial for their physical and mental well-being."
+  },
+  {
+    "id": 3,
+    "title": "Establish a Consistent Routine",
+    "description":  "Dogs thrive on routine. Set consistent feeding times, walk schedules, and potty breaks. This helps them feel secure and prevents accidents or bad behavior."
+  },
+  {
+    "id": 4,
+    "title": "Prioritize Preventative Care",
+    "description": "Regular vet checkups, vaccinations, and parasite control are essential for maintaining your dog's health. Early detection and prevention of potential health issues can save you money and heartache in the long run."
+  },
+  {
+    "id": 5,
+    "title": "Show Plenty of Love and Affection",
+    "description": "Dogs are social creatures who crave love and attention. Spend quality time petting, playing, and cuddling with your dog. This strengthens your bond and creates a happy, well-adjusted canine companion."
+  }
+]
