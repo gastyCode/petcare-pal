@@ -10,5 +10,5 @@ data class Activity (
     @ColumnInfo(name = "activity_id")
     val id: Long,
     val name: String,
-    val time: Long
+    val time: String
 )

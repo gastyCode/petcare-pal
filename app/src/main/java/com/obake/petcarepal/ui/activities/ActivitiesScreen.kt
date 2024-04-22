@@ -43,14 +43,16 @@ import java.util.Date
 
 @Composable
 fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = Modifier) {
-    val list = activitiesViewModel.state.activities
+    val state = activitiesViewModel.state
 
     Box(
         modifier = Modifier.then(modifier)
     ) {
         AddActivityDialog(
-            openDialog = activitiesViewModel.state.openDialog,
-            onAdd = { activitiesViewModel.insert(Activity(0, activitiesViewModel.state.activityName, 100000)) },
+            openDialog = state.openDialog,
+            onAdd = {
+                activitiesViewModel.insert(state.activityName)
+            },
             onDismiss = activitiesViewModel::toggleDialog,
             onNameChange = activitiesViewModel::setActivityName,
             state = activitiesViewModel.state
@@ -111,7 +113,7 @@ fun ActivityList(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = 
         items(list) { activity ->
             ActivityCard(
                 name = activity.name,
-                time = Date(activity.time * 1000).toString(),
+                time = activity.time,
                 icon = Icons.Default.AccountCircle,
                 onRemove = { activitiesViewModel.delete(activity) },
                 modifier = modifier
@@ -190,7 +192,9 @@ fun AddActivityDialog(
                         onValueChange = onNameChange,
                         label = { Text(stringResource(R.string.activity_name)) }
                     )
-                    TimeInput(state = TimePickerState(12, 22, true))
+                    TimeInput(
+                        state = state.timePickerState
+                    )
                 }
             }
         )

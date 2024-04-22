@@ -60,7 +60,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material3.android)
-    implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
+    implementation(libs.androidx.work.runtime.ktx)
     implementation("androidx.compose.runtime:runtime-livedata")
 
     val room_version = "2.6.1"

@@ -35,9 +35,11 @@ import com.obake.petcarepal.ui.tips.TipsScreen
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.ui.overview.OverviewViewModel
 import com.obake.petcarepal.ui.tips.TipsViewModel
+import com.obake.petcarepal.worker.NotificationScheduler
 
 class MainActivity : ComponentActivity() {
     private lateinit var appDatabase: AppDatabase
+    private lateinit var notificationScheduler: NotificationScheduler
     private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var activitiesViewModel: ActivitiesViewModel
     private lateinit var tipsViewModel: TipsViewModel
@@ -46,8 +48,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         appDatabase = AppDatabase.getDatabase(applicationContext)
+        notificationScheduler = NotificationScheduler(applicationContext)
         overviewViewModel = OverviewViewModel(appDatabase.petDao())
-        activitiesViewModel = ActivitiesViewModel(appDatabase.activityDao())
+        activitiesViewModel = ActivitiesViewModel(appDatabase.activityDao(), notificationScheduler)
         tipsViewModel = TipsViewModel(appDatabase.tipDao())
 
         setContent {
