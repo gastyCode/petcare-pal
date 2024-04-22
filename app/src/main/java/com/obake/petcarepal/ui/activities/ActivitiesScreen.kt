@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,14 +19,21 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TimeInput
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
@@ -40,12 +48,18 @@ fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifie
     Box(
         modifier = Modifier.then(modifier)
     ) {
-        AddActivityDialog(openDialog = activitiesViewModel.state.openDialog, onAdd = { activitiesViewModel.insert(
-            Activity(0, "Activity", 100000)
-        ) }, onDismiss = activitiesViewModel::toggleDialog)
+        AddActivityDialog(
+            openDialog = activitiesViewModel.state.openDialog,
+            onAdd = { activitiesViewModel.insert(Activity(0, activitiesViewModel.state.activityName, 100000)) },
+            onDismiss = activitiesViewModel::toggleDialog,
+            onNameChange = activitiesViewModel::setActivityName,
+            state = activitiesViewModel.state
+        )
         Column(
-            modifier = Modifier.then(modifier),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxHeight()
+                .then(modifier),
         ) {
             ActivityList(activitiesViewModel = activitiesViewModel)
         }
@@ -148,11 +162,14 @@ fun ActivityCard(name: String, time: String, icon: ImageVector, onRemove: () -> 
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddActivityDialog(
     openDialog: Boolean,
     onAdd: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onNameChange: (String) -> Unit,
+    state: ActivitiesState
 ) {
     if (openDialog) {
         AlertDialog(
@@ -165,7 +182,17 @@ fun AddActivityDialog(
                 Button(onClick = onAdd) {
                     Text(text = stringResource(id = R.string.add))
                 } },
-            title = { Text(text = stringResource(id = R.string.add_activity)) }
+            title = { Text(text = stringResource(id = R.string.add_activity)) },
+            text = {
+                Column {
+                    TextField(
+                        value = state.activityName,
+                        onValueChange = onNameChange,
+                        label = { Text(stringResource(R.string.activity_name)) }
+                    )
+                    TimeInput(state = TimePickerState(12, 22, true))
+                }
+            }
         )
     }
 }

@@ -60,7 +60,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material3.android)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
     implementation("androidx.compose.runtime:runtime-livedata")
 

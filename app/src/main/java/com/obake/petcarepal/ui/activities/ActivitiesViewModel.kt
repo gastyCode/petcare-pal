@@ -26,6 +26,14 @@ class ActivitiesViewModel(private val activityDao: ActivityDao): ViewModel() {
         state = state.copy(openDialog = !state.openDialog)
     }
 
+    fun setActivityName(name: String) {
+        state = state.copy(
+            activities = state.activities,
+            openDialog = state.openDialog,
+            activityName = name
+        )
+    }
+
     fun delete(activity: Activity) {
         viewModelScope.launch {
             activityDao.delete(activity)
