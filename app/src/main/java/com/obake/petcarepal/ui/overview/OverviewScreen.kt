@@ -42,7 +42,7 @@ fun OverviewScreen(overviewViewModel: OverviewViewModel, modifier: Modifier = Mo
 
     Box(modifier = Modifier.then(modifier)) {
         pet?.name?.let {
-            PetOverview(it, pet.type, pet.date, R.drawable.ic_launcher_background)
+            PetOverview(it, pet.specie, pet.birthdate, R.drawable.ic_launcher_background)
         }
     }
 }

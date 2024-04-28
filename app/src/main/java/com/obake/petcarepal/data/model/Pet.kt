@@ -11,8 +11,8 @@ data class Pet(
     @ColumnInfo(name = "pet_id")
     val id: Long = 0,
     val name: String,
-    val type: String,
-    val date: String,
+    val specie: String,
+    val birthdate: String,
     @ColumnInfo(name = "image_url")
     val imageUrl: String
 )
