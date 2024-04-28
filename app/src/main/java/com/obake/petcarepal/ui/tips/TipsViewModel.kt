@@ -18,7 +18,7 @@ class TipsViewModel(private val tipDao: TipDao): ViewModel() {
     init {
         viewModelScope.launch {
             tipDao.getAll().asLiveData().observeForever {
-                state = state.copy(tips = it, currentTip = state.tips.firstOrNull())
+                state = state.copy(tips = it, currentTip = it.firstOrNull())
             }
         }
     }

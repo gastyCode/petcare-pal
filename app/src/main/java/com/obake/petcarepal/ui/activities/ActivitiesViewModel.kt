@@ -23,14 +23,24 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
     init {
         viewModelScope.launch {
             activityDao.getAll().asLiveData().observeForever {
-                state = state.copy(activities = it, openDialog = false, timePickerState = state.timePickerState)
+                state = state.copy(
+                    activities = it,
+                    openDialog = false,
+                    openDropdown = false,
+                    timePickerState = state.timePickerState
+                )
             }
         }
     }
 
     fun toggleDialog() {
+        resetDialog()
         updateTimePickerState()
         state = state.copy(openDialog = !state.openDialog)
+    }
+
+    fun toggleDropdown() {
+        state = state.copy(openDropdown = !state.openDropdown)
     }
 
     fun setActivityName(name: String) {
@@ -41,6 +51,15 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
         )
     }
 
+    fun setActivityIcon(type: String, icon: Int) {
+        state = state.copy(
+            activities = state.activities,
+            openDialog = state.openDialog,
+            activityType = type,
+            activityIcon = icon
+        )
+    }
+
     fun delete(activity: Activity) {
         viewModelScope.launch {
             notificationScheduler.cancel(activity.id)
@@ -48,7 +67,7 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
         }
     }
 
-    fun insert(name: String) {
+    fun insert(name: String, type: String, icon: Int) {
         viewModelScope.launch {
             val time = timeStateToMillis()
             val calendar = Calendar.getInstance()
@@ -59,7 +78,9 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
             val timeString = format.format(calendar.time)
 
             notificationScheduler.schedule(timeStateToMillis(), name, time)
-            activityDao.insert(Activity(0, name, timeString))
+            activityDao.insert(Activity(0, name, timeString, type, icon))
+
+            resetDialog()
         }
     }
 
@@ -87,5 +108,17 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
         calendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
         calendar.set(Calendar.MINUTE, timePickerState.minute)
         return calendar.timeInMillis
+    }
+
+    private fun resetDialog() {
+        state = state.copy(
+            activities = state.activities,
+            openDialog = state.openDialog,
+            openDropdown = state.openDropdown,
+            activityName = "",
+            activityType = "",
+            activityIcon = 0,
+            timePickerState = state.timePickerState
+        )
     }
 }

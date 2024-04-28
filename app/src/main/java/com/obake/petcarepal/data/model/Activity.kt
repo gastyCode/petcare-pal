@@ -10,5 +10,7 @@ data class Activity (
     @ColumnInfo(name = "activity_id")
     val id: Long,
     val name: String,
-    val time: String
+    val time: String,
+    val type: String,
+    val icon: Int
 )

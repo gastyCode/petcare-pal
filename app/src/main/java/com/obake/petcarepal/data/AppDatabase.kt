@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-@Database(entities = [Pet::class, Tip::class, Activity::class], version = 2)
+@Database(entities = [Pet::class, Tip::class, Activity::class], version = 3)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun petDao(): PetDao
     abstract fun tipDao(): TipDao

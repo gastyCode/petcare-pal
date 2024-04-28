@@ -20,7 +20,10 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,11 +35,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
+import com.obake.petcarepal.data.ActivityIcons
 import com.obake.petcarepal.data.model.Activity
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import java.util.Date
@@ -45,18 +50,21 @@ import java.util.Date
 fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = Modifier) {
     val state = activitiesViewModel.state
 
+    AddActivityDialog(
+        openDialog = state.openDialog,
+        onAdd = {
+            activitiesViewModel.insert(state.activityName, state.activityType, state.activityIcon)
+        },
+        onDialogDismiss = activitiesViewModel::toggleDialog,
+        onDropdownDismiss = activitiesViewModel::toggleDropdown,
+        onNameChange = activitiesViewModel::setActivityName,
+        onIconChange = activitiesViewModel::setActivityIcon,
+        state = activitiesViewModel.state
+    )
+
     Box(
         modifier = Modifier.then(modifier)
     ) {
-        AddActivityDialog(
-            openDialog = state.openDialog,
-            onAdd = {
-                activitiesViewModel.insert(state.activityName)
-            },
-            onDismiss = activitiesViewModel::toggleDialog,
-            onNameChange = activitiesViewModel::setActivityName,
-            state = activitiesViewModel.state
-        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -104,7 +112,7 @@ fun AddActivityButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 fun ActivityList(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = Modifier) {
-    val list = activitiesViewModel.state.activities
+    val list = activitiesViewModel.state.activities.sortedBy { it.time }
 
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
@@ -114,7 +122,8 @@ fun ActivityList(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = 
             ActivityCard(
                 name = activity.name,
                 time = activity.time,
-                icon = Icons.Default.AccountCircle,
+                type = activity.type,
+                icon = activity.icon,
                 onRemove = { activitiesViewModel.delete(activity) },
                 modifier = modifier
             )
@@ -123,7 +132,7 @@ fun ActivityList(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = 
 }
 
 @Composable
-fun ActivityCard(name: String, time: String, icon: ImageVector, onRemove: () -> Unit, modifier: Modifier = Modifier) {
+fun ActivityCard(name: String, time: String, type: String, icon: Int, onRemove: () -> Unit, modifier: Modifier = Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,8 +149,8 @@ fun ActivityCard(name: String, time: String, icon: ImageVector, onRemove: () -> 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = icon,
-                    contentDescription = null,
+                    painter = painterResource(id = icon),
+                    contentDescription = type,
                     modifier = Modifier
                         .size(48.dp)
                         .padding(end = 8.dp)
@@ -169,15 +178,17 @@ fun ActivityCard(name: String, time: String, icon: ImageVector, onRemove: () -> 
 fun AddActivityDialog(
     openDialog: Boolean,
     onAdd: () -> Unit,
-    onDismiss: () -> Unit,
+    onDialogDismiss: () -> Unit,
+    onDropdownDismiss: () -> Unit,
     onNameChange: (String) -> Unit,
+    onIconChange: (String, Int) -> Unit,
     state: ActivitiesState
 ) {
     if (openDialog) {
         AlertDialog(
-            onDismissRequest = onDismiss,
+            onDismissRequest = onDialogDismiss,
             dismissButton = {
-                Button(onClick = onDismiss) {
+                Button(onClick = onDialogDismiss) {
                     Text(text = stringResource(id = R.string.cancel))
                 } },
             confirmButton = {
@@ -186,18 +197,68 @@ fun AddActivityDialog(
                 } },
             title = { Text(text = stringResource(id = R.string.add_activity)) },
             text = {
-                Column {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
                     TextField(
                         value = state.activityName,
                         onValueChange = onNameChange,
                         label = { Text(stringResource(R.string.activity_name)) }
                     )
+                    IconsDropdownMenu(state, onDropdownDismiss, onIconChange)
                     TimeInput(
                         state = state.timePickerState
                     )
                 }
             }
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun IconsDropdownMenu(state: ActivitiesState, toggleDropdown: () -> Unit, onIconChange: (String, Int) -> Unit) {
+    Column {
+        ExposedDropdownMenuBox(
+            expanded = state.openDropdown,
+            onExpandedChange = { toggleDropdown() },
+        ) {
+            TextField(
+                modifier = Modifier.menuAnchor(),
+                value = state.activityType,
+                onValueChange = { },
+                readOnly = true,
+                label = { Text(stringResource(R.string.activity_type)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = state.openDropdown) }
+            )
+            ExposedDropdownMenu(
+                expanded = state.openDropdown,
+                onDismissRequest = { toggleDropdown() },
+            ) {
+                ActivityIcons.entries.forEach { icon ->
+                    DropdownMenuItem(
+                        text = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = icon.icon),
+                                    contentDescription = icon.name,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                Text(text = icon.name)
+                            }
+                        },
+                        onClick = {
+                            onIconChange(icon.name, icon.icon)
+                            toggleDropdown()
+                                  },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                    )
+                }
+            }
+        }
     }
 }
 
