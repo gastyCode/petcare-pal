@@ -6,16 +6,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.obake.petcarepal.data.Screen
 import com.obake.petcarepal.data.dao.PetDao
 import com.obake.petcarepal.data.model.Pet
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
-class AddPetViewModel(private val petDao: PetDao): ViewModel() {
+class AddPetViewModel(private val petDao: PetDao, val navigateToNext: (String) -> Unit): ViewModel() {
     var state by mutableStateOf(AddPetState())
         private set
+
+    init {
+        viewModelScope.launch {
+            if (petDao.count() > 0) {
+                navigateToNext(Screen.Home.name)
+            }
+        }
+    }
 
     fun toggleDialog() {
         state = state.copy(openDialog = !state.openDialog)

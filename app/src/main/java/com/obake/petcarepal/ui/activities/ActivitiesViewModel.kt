@@ -74,7 +74,7 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = time
 
-            // TODO 1: Change the time format to locale specific
+            // TODO: Change the time format to locale specific
             val format = SimpleDateFormat("HH:mm")
             val timeString = format.format(calendar.time)
 
