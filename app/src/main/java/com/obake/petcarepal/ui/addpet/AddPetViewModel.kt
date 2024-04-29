@@ -5,7 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.obake.petcarepal.data.dao.PetDao
+import com.obake.petcarepal.data.model.Pet
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -30,10 +33,9 @@ class AddPetViewModel(private val petDao: PetDao): ViewModel() {
         state = state.copy(petBirthdate = petBirthdate)
     }
 
-    fun millisToDate(milliseconds: Long): String {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = milliseconds
-        val format = SimpleDateFormat("DD.MM.YYYY")
-        return format.format(calendar.time)
+    fun insert(name: String, specie: String, birthdate: String) {
+        viewModelScope.launch {
+            petDao.insert(Pet(0, name, specie, birthdate, ""))
+        }
     }
 }

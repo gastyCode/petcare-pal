@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
+import com.obake.petcarepal.util.DateHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +41,8 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, modifier: Modifier = Modifier
             state.petBirthdate,
             state.openDialog,
             state.datePickerState,
-            addPetViewModel
+            addPetViewModel::setPetBirthdate,
+            addPetViewModel::toggleDialog
         )
         AddPetButton(onClick = {})
     }
@@ -73,16 +75,17 @@ fun AddPetDateInput(
     value: String,
     isPickerOpen: Boolean,
     datePickerState: DatePickerState,
-    addPetViewModel: AddPetViewModel,
+    onChange: (String) -> Unit,
+    toggleDialog: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TextField(
         label = { Text(text = label) },
         value = value,
-        onValueChange = addPetViewModel::setPetBirthdate,
+        onValueChange = onChange,
         readOnly = true,
         trailingIcon = {
-           IconButton(onClick = addPetViewModel::toggleDialog) {
+           IconButton(onClick = toggleDialog) {
                Icon(imageVector = Icons.Default.DateRange, contentDescription = "Date Picker")
            }
         },
@@ -90,11 +93,11 @@ fun AddPetDateInput(
     )
     if (isPickerOpen) {
         DatePickerDialog(
-            onDismissRequest = addPetViewModel::toggleDialog,
+            onDismissRequest = toggleDialog,
             confirmButton = {
                 Button(onClick = {
-                    addPetViewModel.setPetBirthdate(addPetViewModel.millisToDate(datePickerState.selectedDateMillis ?: 0))
-                    addPetViewModel.toggleDialog()
+                    DateHelper.millisToDate(datePickerState.selectedDateMillis ?: 0)
+                    toggleDialog()
                 }) {
                     Text(text = stringResource(id = R.string.confirm))
                 }

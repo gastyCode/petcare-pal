@@ -10,6 +10,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.obake.petcarepal.data.dao.ActivityDao
 import com.obake.petcarepal.data.model.Activity
+import com.obake.petcarepal.util.DateHelper
 import com.obake.petcarepal.worker.NotificationScheduler
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -69,7 +70,7 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
 
     fun insert(name: String, type: String, icon: Int) {
         viewModelScope.launch {
-            val time = timeStateToMillis()
+            val time = DateHelper.timeStateToMillis(state.timePickerState)
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = time
 
@@ -77,7 +78,7 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
             val format = SimpleDateFormat("HH:mm")
             val timeString = format.format(calendar.time)
 
-            notificationScheduler.schedule(timeStateToMillis(), name, time)
+            notificationScheduler.schedule(time, name, time)
             activityDao.insert(Activity(0, name, timeString, type, icon))
 
             resetDialog()
@@ -100,14 +101,6 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val noti
             activityName = state.activityName,
             timePickerState = TimePickerState(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
         )
-    }
-
-    private fun timeStateToMillis(): Long {
-        val timePickerState = state.timePickerState
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
-        calendar.set(Calendar.MINUTE, timePickerState.minute)
-        return calendar.timeInMillis
     }
 
     private fun resetDialog() {
