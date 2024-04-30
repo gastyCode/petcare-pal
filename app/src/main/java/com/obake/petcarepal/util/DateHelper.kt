@@ -9,8 +9,8 @@ object DateHelper {
      fun millisToDate(milliseconds: Long): String {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = milliseconds
-        val format = SimpleDateFormat("DD.MM.YYYY")
-        return format.format(calendar.time)
+        val format = SimpleDateFormat("dd.MM.YYYY")
+        return format.format(calendar.time).toString()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

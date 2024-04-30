@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.compose.runtime:runtime-livedata")
 
     val room_version = "2.6.1"
