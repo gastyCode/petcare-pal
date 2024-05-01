@@ -1,21 +1,19 @@
 package com.obake.petcarepal.ui.addpet
 
+import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
@@ -26,27 +24,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.Screen
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.util.DateHelper
-import kotlin.math.log
+import com.obake.petcarepal.util.StorageHelper
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPetScreen(addPetViewModel: AddPetViewModel, modifier: Modifier = Modifier) {
+fun AddPetScreen(addPetViewModel: AddPetViewModel, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
     val state = addPetViewModel.state
 
     Box(
@@ -65,26 +67,7 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, modifier: Modifier = Modifier
             )
 
             // TODO: Image
-            var imageUri: Uri? = null
-            val galleryLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.GetContent(),
-                onResult = { uri ->
-                    imageUri = uri
-                }
-            )
-
-            SubcomposeAsyncImage(
-                model = imageUri,
-                loading = { CircularProgressIndicator() },
-                contentDescription = "Pet Image",
-                onError = { error ->
-                    Log.e("Image", "Error loading image ${error.result}")
-                },
-                modifier = Modifier.size(100.dp)
-            )
-            Button(onClick = { galleryLauncher.launch("image/*") }) {
-                Text(text = "Open Image")
-            }
+            AddPetImageInput(state.petImage, storageHelper)
 
             AddPetTextInput(
                 stringResource(id = R.string.name),
@@ -105,9 +88,56 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, modifier: Modifier = Modifier
                 addPetViewModel::toggleDialog
             )
             AddPetButton(onClick = {
-                addPetViewModel.insert(state.petName, state.petSpecie, state.petBirthdate)
+                addPetViewModel.insert(state.petName, state.petSpecie, state.petBirthdate, state.petImage)
                 addPetViewModel.navigateToNext(Screen.Home.name)
             })
+        }
+    }
+}
+
+// TODO: Adding more pets
+// From Medium: https://readmedium.com/en/https:/medium.com/@cherfaoui_dev/easy-image-picking-no-permissions-required-using-jetpack-compose-733c17163369
+@Composable
+fun AddPetImageInput(imageName: String, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
+    var imageUri: Uri? by remember { mutableStateOf(null) }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) {
+            it?.let { uri ->
+                context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION )
+                scope.launch {
+                    storageHelper.saveImage(context, imageName, uri.toString())
+                }
+            }
+        }
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
+    ) {
+        AsyncImage(
+            model = imageUri,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .aspectRatio(1f)
+                .clickable { launcher.launch(arrayOf("image/*")) }
+        )
+        Button(
+            onClick = {
+                launcher.launch(arrayOf("image/*"))
+            },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            Text(text = "Pick Image")
+        }
+    }
+    LaunchedEffect(key1 = true) {
+        storageHelper.loadImage(context, imageName).collect {
+            if (it != null)
+                imageUri = Uri.parse(it)
         }
     }
 }

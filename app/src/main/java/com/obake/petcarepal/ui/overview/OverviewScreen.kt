@@ -1,5 +1,6 @@
 package com.obake.petcarepal.ui.overview
 
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,51 +22,84 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
+import com.obake.petcarepal.util.StorageHelper
 
 @Composable
-fun OverviewScreen(overviewViewModel: OverviewViewModel, modifier: Modifier = Modifier) {
+fun OverviewScreen(overviewViewModel: OverviewViewModel, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
     val pets: State<List<Pet>?> = overviewViewModel.pets.observeAsState()
     val pet = pets.value?.getOrNull(0)
 
     Box(modifier = Modifier.then(modifier)) {
-        pet?.name?.let {
-            PetOverview(it, pet.specie, pet.birthdate, R.drawable.ic_launcher_background)
+        pet?.let {
+            PetOverview(pet.name, pet.specie, pet.birthdate, pet.imageUrl, storageHelper)
         }
     }
 }
 
 @Composable
-fun PetOverview(name: String, type: String, date: String, @DrawableRes image: Int, modifier: Modifier = Modifier) {
+fun PetOverview(name: String, type: String, date: String, imageUrl: String, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .then(modifier)
     ) {
-        Image(
-            painter = painterResource(id = image),
-            contentDescription = name,
+
+        PetImage(
+            imageUrl,
+            storageHelper,
             modifier = Modifier
-                .aspectRatio(1f)
+                .align(Alignment.TopCenter)
         )
+
         Card(
             modifier = Modifier
-                .fillMaxHeight(0.55f)
                 .align(Alignment.BottomCenter)
+                .fillMaxHeight(0.5f)
         ) {
             PetStats(name, type, date)
+        }
+    }
+}
+
+@Composable
+fun PetImage(imageUrl: String, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
+    var imageUri: Uri? by remember { mutableStateOf(null) }
+    val context = LocalContext.current
+
+    AsyncImage(
+        model = imageUri,
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .then(modifier)
+    )
+    LaunchedEffect(key1 = true) {
+        storageHelper.loadImage(context, imageUrl).collect {
+            if (it != null)
+                imageUri = Uri.parse(it)
         }
     }
 }

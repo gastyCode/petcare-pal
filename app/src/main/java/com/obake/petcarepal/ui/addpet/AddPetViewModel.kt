@@ -40,9 +40,9 @@ class AddPetViewModel(private val petDao: PetDao, val navigateToNext: (String) -
         state = state.copy(petBirthdate = petBirthdate)
     }
 
-    fun insert(name: String, specie: String, birthdate: String) {
+    fun insert(name: String, specie: String, birthdate: String, imageUrl: String) {
         viewModelScope.launch {
-            petDao.insert(Pet(0, name, specie, birthdate, ""))
+            petDao.insert(Pet(0, name, specie, birthdate, imageUrl))
         }
     }
 }

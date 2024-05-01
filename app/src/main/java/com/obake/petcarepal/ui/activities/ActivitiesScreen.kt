@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -68,25 +69,16 @@ fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifie
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxHeight()
+                .fillMaxSize()
                 .then(modifier),
         ) {
-            ActivityList(activitiesViewModel = activitiesViewModel)
-        }
-
-        BottomAppBar(
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
-            Box(
+            AddActivityButton(
+                onClick = activitiesViewModel::toggleDialog,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterVertically)
-            ) {
-                AddActivityButton(
-                    onClick = activitiesViewModel::toggleDialog,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+                    .padding(8.dp)
+                    .align(Alignment.End)
+            )
+            ActivityList(activitiesViewModel = activitiesViewModel)
         }
     }
 }
@@ -101,10 +93,6 @@ fun AddActivityButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = stringResource(id = R.string.add_activity),
-                style = MaterialTheme.typography.titleMedium
-            )
             Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.add_activity))
         }
     }

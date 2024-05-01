@@ -26,12 +26,14 @@ import com.obake.petcarepal.ui.overview.OverviewViewModel
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.ui.tips.TipsScreen
 import com.obake.petcarepal.ui.tips.TipsViewModel
+import com.obake.petcarepal.util.StorageHelper
 import com.obake.petcarepal.worker.NotificationScheduler
 
 @Composable
 fun Application(context: Context) {
     val appDatabase = AppDatabase.getDatabase(context)
     val notificationScheduler = NotificationScheduler(context)
+    val storageHelper = StorageHelper()
     val navController = rememberNavController()
 
     val overviewViewModel = OverviewViewModel(appDatabase.petDao())
@@ -41,7 +43,6 @@ fun Application(context: Context) {
 
     PetCarePalTheme {
         Surface(
-            color = MaterialTheme.colorScheme.background,
             modifier = Modifier.fillMaxSize()
         ) {
             Scaffold(
@@ -54,10 +55,10 @@ fun Application(context: Context) {
             ) { padding ->
                 NavHost(navController = navController, startDestination = Screen.AddPet.name) {
                     composable(Screen.AddPet.name) {
-                        AddPetScreen(addPetViewModel, modifier = Modifier.padding(padding))
+                        AddPetScreen(addPetViewModel, storageHelper, modifier = Modifier.padding(padding))
                     }
                     composable(Screen.Home.name) {
-                        OverviewScreen(overviewViewModel, modifier = Modifier.padding(padding))
+                        OverviewScreen(overviewViewModel, storageHelper, modifier = Modifier.padding(padding))
                     }
                     composable(Screen.Activities.name) {
                         ActivitiesScreen(activitiesViewModel, modifier = Modifier.padding(padding))

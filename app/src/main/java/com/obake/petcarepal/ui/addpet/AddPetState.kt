@@ -9,5 +9,6 @@ data class AddPetState @OptIn(ExperimentalMaterial3Api::class) constructor(
     val petName: String = "",
     val petSpecie: String = "",
     val petBirthdate: String = "",
+    val petImage: String = "image",
     val datePickerState: DatePickerState = DatePickerState(Locale.getDefault()),
 )
