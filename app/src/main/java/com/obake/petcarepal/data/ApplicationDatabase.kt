@@ -19,20 +19,20 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 
 @Database(entities = [Pet::class, Tip::class, Activity::class], version = 4)
-abstract class AppDatabase: RoomDatabase() {
+abstract class ApplicationDatabase: RoomDatabase() {
     abstract fun petDao(): PetDao
     abstract fun tipDao(): TipDao
     abstract fun activityDao(): ActivityDao
 
     companion object {
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+        private var INSTANCE: ApplicationDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        fun getDatabase(context: Context): ApplicationDatabase {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(
                     context,
-                    AppDatabase::class.java,
+                    ApplicationDatabase::class.java,
                     "petcarepal_db"
                 )
                     .fallbackToDestructiveMigration()
@@ -55,7 +55,7 @@ class PrepopulateCallback(private val context: Context): RoomDatabase.Callback()
 
     private suspend fun prepopulateDatabase(context: Context) {
         try {
-            val tipDao = AppDatabase.getDatabase(context).tipDao()
+            val tipDao = ApplicationDatabase.getDatabase(context).tipDao()
 
             val tipList: JSONArray = context.resources.openRawResource(R.raw.tips).use {
                 JSONArray(it.bufferedReader().use { it.readText() })

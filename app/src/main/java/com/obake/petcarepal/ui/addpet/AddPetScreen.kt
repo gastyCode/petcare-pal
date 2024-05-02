@@ -87,10 +87,7 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, storageHelper: StorageHelper,
                 addPetViewModel::setPetBirthdate,
                 addPetViewModel::toggleDialog
             )
-            AddPetButton(onClick = {
-                addPetViewModel.insert(state.petName, state.petSpecie, state.petBirthdate, state.petImage)
-                addPetViewModel.navigateToNext(Screen.Home.name)
-            })
+            AddPetButton(onClick = addPetViewModel::handleAddPet)
         }
     }
 }

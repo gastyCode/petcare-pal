@@ -1,11 +1,11 @@
 package com.obake.petcarepal.ui.activities
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,14 +13,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -30,22 +27,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TimeInput
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.ActivityIcons
-import com.obake.petcarepal.data.model.Activity
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
-import java.util.Date
 
 @Composable
 fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = Modifier) {
@@ -56,8 +47,8 @@ fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifie
         onAdd = {
             activitiesViewModel.insert(state.activityName, state.activityType, state.activityIcon)
         },
-        onDialogDismiss = activitiesViewModel::toggleDialog,
-        onDropdownDismiss = activitiesViewModel::toggleDropdown,
+        toggleDialog = activitiesViewModel::toggleDialog,
+        toggleDropdown = activitiesViewModel::toggleDropdown,
         onNameChange = activitiesViewModel::setActivityName,
         onIconChange = activitiesViewModel::setActivityIcon,
         state = activitiesViewModel.state
@@ -166,17 +157,17 @@ fun ActivityCard(name: String, time: String, type: String, icon: Int, onRemove: 
 fun AddActivityDialog(
     openDialog: Boolean,
     onAdd: () -> Unit,
-    onDialogDismiss: () -> Unit,
-    onDropdownDismiss: () -> Unit,
+    toggleDialog: () -> Unit,
+    toggleDropdown: () -> Unit,
     onNameChange: (String) -> Unit,
     onIconChange: (String, Int) -> Unit,
     state: ActivitiesState
 ) {
     if (openDialog) {
         AlertDialog(
-            onDismissRequest = onDialogDismiss,
+            onDismissRequest = toggleDialog,
             dismissButton = {
-                Button(onClick = onDialogDismiss) {
+                Button(onClick = toggleDialog) {
                     Text(text = stringResource(id = R.string.cancel))
                 } },
             confirmButton = {
@@ -193,7 +184,35 @@ fun AddActivityDialog(
                         onValueChange = onNameChange,
                         label = { Text(stringResource(R.string.activity_name)) }
                     )
-                    IconsDropdownMenu(state, onDropdownDismiss, onIconChange)
+                    DropdownMenu(
+                        openDropdown = state.openDropdown,
+                        value = state.activityType,
+                        label = R.string.add_activity,
+                        toggleDropdown = toggleDropdown
+                    ) {
+                        ActivityIcons.entries.forEach { icon ->
+                            DropdownMenuItem(
+                                text = {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = icon.icon),
+                                            contentDescription = stringResource(id = icon.resName),
+                                            modifier = Modifier.size(24.dp)
+                                        )
+                                        Text(text = stringResource(id = icon.resName))
+                                    }
+                                },
+                                onClick = {
+                                    onIconChange(icon.name, icon.icon)
+                                    toggleDropdown()
+                                },
+                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                            )
+                        }
+                    }
                     TimeInput(
                         state = state.timePickerState
                     )
@@ -205,46 +224,32 @@ fun AddActivityDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IconsDropdownMenu(state: ActivitiesState, toggleDropdown: () -> Unit, onIconChange: (String, Int) -> Unit) {
-    Column {
+fun DropdownMenu(
+    openDropdown: Boolean,
+    value: String,
+    @StringRes label: Int,
+    toggleDropdown: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Column(modifier = modifier) {
         ExposedDropdownMenuBox(
-            expanded = state.openDropdown,
+            expanded = openDropdown,
             onExpandedChange = { toggleDropdown() },
         ) {
             TextField(
                 modifier = Modifier.menuAnchor(),
-                value = state.activityType,
+                value = value,
                 onValueChange = { },
                 readOnly = true,
-                label = { Text(stringResource(R.string.activity_type)) },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = state.openDropdown) }
+                label = { Text(stringResource(label)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = openDropdown) }
             )
             ExposedDropdownMenu(
-                expanded = state.openDropdown,
+                expanded = openDropdown,
                 onDismissRequest = { toggleDropdown() },
             ) {
-                ActivityIcons.entries.forEach { icon ->
-                    DropdownMenuItem(
-                        text = {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = icon.icon),
-                                    contentDescription = icon.name,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Text(text = icon.name)
-                            }
-                        },
-                        onClick = {
-                            onIconChange(icon.name, icon.icon)
-                            toggleDropdown()
-                                  },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                    )
-                }
+                content()
             }
         }
     }

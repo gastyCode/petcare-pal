@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.obake.petcarepal.data.NavigationScreen
 
@@ -20,8 +21,8 @@ fun Navigation(navController: NavController) {
     NavigationBar {
         NavigationScreen.screens.forEachIndexed { index, screen ->
             NavigationBarItem(
-                icon = { Icon(painterResource(id = screen.icon), contentDescription = screen.screen.name) },
-                label = { Text(screen.screen.name) },
+                icon = { Icon(painterResource(id = screen.icon), contentDescription = stringResource(id = screen.resName)) },
+                label = { Text(stringResource(id = screen.resName)) },
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index

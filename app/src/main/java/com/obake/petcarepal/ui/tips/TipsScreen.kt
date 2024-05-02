@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +38,7 @@ fun TipsScreen(tipsViewModel: TipsViewModel, modifier: Modifier = Modifier) {
 
 @Composable
 fun TipCard(title: String, description: String, onNext: () -> Unit, onPrevious: () -> Unit, modifier: Modifier = Modifier) {
-    Box (
+    Card (
         modifier = Modifier
             .fillMaxWidth()
             .then(modifier)

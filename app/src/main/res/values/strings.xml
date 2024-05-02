@@ -12,8 +12,30 @@
     <string name="date_of_birth">Date of Birth</string>
     <string name="activity_name">Activity Name</string>
     <string name="activity_type">Activity Type</string>
+    // Activity types
+    <string name="walk">Walk</string>
+    <string name="feed">Feed</string>
+    <string name="play">Play</string>
+    <string name="groom">Groom</string>
+    <string name="brush">Brush</string>
+    <string name="train">Train</string>
+    <string name="sleep">Sleep</string>
+    // Screen titles
     <string name="home">Home</string>
     <string name="activities">Activities</string>
     <string name="calendar">Calendar</string>
+    <string name="tips">Tips</string>
     <string name="add_pet">Add Pet</string>
+    // Species types
+    <string name="dog">Dog</string>
+    <string name="cat">Cat</string>
+    <string name="bird">Bird</string>
+    <string name="fish">Fish</string>
+    <string name="rabbit">Rabbit</string>
+    <string name="hamster">Hamster</string>
+    <string name="guinea_pig">Guinea Pig</string>
+    <string name="ferret">Ferret</string>
+    <string name="reptile">Reptile</string>
+    <string name="amphibian">Amphibian</string>
+    <string name="other">Other</string>
 </resources>

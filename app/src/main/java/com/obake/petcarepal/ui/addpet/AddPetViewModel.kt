@@ -6,22 +6,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.obake.petcarepal.data.Screen
 import com.obake.petcarepal.data.dao.PetDao
 import com.obake.petcarepal.data.model.Pet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-class AddPetViewModel(private val petDao: PetDao, val navigateToNext: (String) -> Unit): ViewModel() {
+class AddPetViewModel(private val petDao: PetDao, private val navController: NavController): ViewModel() {
     var state by mutableStateOf(AddPetState())
         private set
 
-    init {
-        viewModelScope.launch {
-            if (petDao.count() > 0) {
-                navigateToNext(Screen.Home.name)
-            }
-        }
+    fun handleAddPet() {
+        insert(state.petName, state.petSpecie, state.petBirthdate, state.petImage)
+        navController.popBackStack()
+        navController.navigate(Screen.Home.name)
     }
 
     fun toggleDialog() {
