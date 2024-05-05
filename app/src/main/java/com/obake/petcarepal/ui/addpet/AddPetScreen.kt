@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.Screen
+import com.obake.petcarepal.data.Species
+import com.obake.petcarepal.ui.components.DropdownMenu
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.util.DateHelper
 import com.obake.petcarepal.util.StorageHelper
@@ -74,11 +77,24 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, storageHelper: StorageHelper,
                 state.petName,
                 onChange = addPetViewModel::setPetName
             )
-            AddPetTextInput(
-                stringResource(id = R.string.species),
-                state.petSpecie,
-                onChange = addPetViewModel::setPetSpecie
-            )
+            DropdownMenu(
+                value = state.petSpecie,
+                label = R.string.species,
+                openDropdown = state.openDropdown,
+                toggleDropdown = addPetViewModel::toggleDropdown
+            ) {
+                Species.entries.forEach { specie ->
+                    DropdownMenuItem(
+                        text = {
+                               Text(text = stringResource(id = specie.resName))
+                        },
+                        onClick = {
+                            addPetViewModel.setPetSpecie(specie.name)
+                            addPetViewModel.toggleDropdown()
+                        }
+                    )
+                }
+            }
             AddPetDateInput(
                 stringResource(id = R.string.date_of_birth),
                 state.petBirthdate,

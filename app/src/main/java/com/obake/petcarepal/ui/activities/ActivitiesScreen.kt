@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.ActivityIcons
+import com.obake.petcarepal.ui.components.DropdownMenu
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 
 @Composable
@@ -185,9 +186,9 @@ fun AddActivityDialog(
                         label = { Text(stringResource(R.string.activity_name)) }
                     )
                     DropdownMenu(
-                        openDropdown = state.openDropdown,
                         value = state.activityType,
                         label = R.string.add_activity,
+                        openDropdown = state.openDropdown,
                         toggleDropdown = toggleDropdown
                     ) {
                         ActivityIcons.entries.forEach { icon ->
@@ -219,39 +220,6 @@ fun AddActivityDialog(
                 }
             }
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropdownMenu(
-    openDropdown: Boolean,
-    value: String,
-    @StringRes label: Int,
-    toggleDropdown: () -> Unit,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    Column(modifier = modifier) {
-        ExposedDropdownMenuBox(
-            expanded = openDropdown,
-            onExpandedChange = { toggleDropdown() },
-        ) {
-            TextField(
-                modifier = Modifier.menuAnchor(),
-                value = value,
-                onValueChange = { },
-                readOnly = true,
-                label = { Text(stringResource(label)) },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = openDropdown) }
-            )
-            ExposedDropdownMenu(
-                expanded = openDropdown,
-                onDismissRequest = { toggleDropdown() },
-            ) {
-                content()
-            }
-        }
     }
 }
 

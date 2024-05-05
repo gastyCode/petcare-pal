@@ -6,6 +6,7 @@ import java.util.Locale
 
 data class AddPetState @OptIn(ExperimentalMaterial3Api::class) constructor(
     val openDialog: Boolean = false,
+    val openDropdown: Boolean = false,
     val petName: String = "",
     val petSpecie: String = "",
     val petBirthdate: String = "",

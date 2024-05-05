@@ -27,6 +27,10 @@ class AddPetViewModel(private val petDao: PetDao, private val navController: Nav
         state = state.copy(openDialog = !state.openDialog)
     }
 
+    fun toggleDropdown() {
+        state = state.copy(openDropdown = !state.openDropdown)
+    }
+
     fun setPetName(petName: String) {
         state = state.copy(petName = petName)
     }

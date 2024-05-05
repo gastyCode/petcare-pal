@@ -5,7 +5,7 @@ import com.obake.petcarepal.R
 enum class Species(val resName: Int) {
     Dog(R.string.dog),
     Cat(R.string.cat),
-    Bird(R.string.bird),
+    Parrot(R.string.parrot),
     Fish(R.string.fish),
     Rabbit(R.string.rabbit),
     Hamster(R.string.hamster),

@@ -13,12 +13,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.obake.petcarepal.data.ApplicationDatabase
 import com.obake.petcarepal.data.Screen
-import com.obake.petcarepal.ui.Navigation
 import com.obake.petcarepal.ui.activities.ActivitiesScreen
 import com.obake.petcarepal.ui.activities.ActivitiesViewModel
 import com.obake.petcarepal.ui.addpet.AddPetScreen
 import com.obake.petcarepal.ui.addpet.AddPetViewModel
 import com.obake.petcarepal.ui.calendar.CalendarScreen
+import com.obake.petcarepal.ui.components.Navigation
 import com.obake.petcarepal.ui.overview.OverviewScreen
 import com.obake.petcarepal.ui.overview.OverviewViewModel
 import com.obake.petcarepal.ui.theme.PetCarePalTheme

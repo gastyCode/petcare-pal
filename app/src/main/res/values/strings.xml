@@ -29,7 +29,7 @@
     // Species types
     <string name="dog">Dog</string>
     <string name="cat">Cat</string>
-    <string name="bird">Bird</string>
+    <string name="parrot">Parrot</string>
     <string name="fish">Fish</string>
     <string name="rabbit">Rabbit</string>
     <string name="hamster">Hamster</string>
