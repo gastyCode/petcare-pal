@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,17 +70,18 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, storageHelper: StorageHelper,
                 style = MaterialTheme.typography.headlineMedium
             )
 
-            // TODO: Image
             AddPetImageInput(state.petImage, storageHelper)
 
             AddPetTextInput(
-                stringResource(id = R.string.name),
-                state.petName,
+                label = R.string.name,
+                value = state.petName,
+                error = state.inputError,
                 onChange = addPetViewModel::setPetName
             )
             DropdownMenu(
                 value = state.petSpecie,
                 label = R.string.species,
+                error = state.inputError,
                 openDropdown = state.openDropdown,
                 toggleDropdown = addPetViewModel::toggleDropdown
             ) {
@@ -96,12 +98,13 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, storageHelper: StorageHelper,
                 }
             }
             AddPetDateInput(
-                stringResource(id = R.string.date_of_birth),
-                state.petBirthdate,
-                state.openDialog,
-                state.datePickerState,
-                addPetViewModel::setPetBirthdate,
-                addPetViewModel::toggleDialog
+                label = R.string.date_of_birth,
+                value = state.petBirthdate,
+                error = state.inputError,
+                isPickerOpen = state.openDialog,
+                datePickerState = state.datePickerState,
+                onChange = addPetViewModel::setPetBirthdate,
+                toggleDialog = addPetViewModel::toggleDialog
             )
             AddPetButton(onClick = addPetViewModel::handleAddPet)
         }
@@ -166,33 +169,42 @@ fun AddPetButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun AddPetTextInput(label: String, value: String, onChange: (String) -> Unit, modifier: Modifier = Modifier) {
+fun AddPetTextInput(
+    @StringRes label: Int,
+    value: String,
+    error: Boolean = false,
+    onChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     TextField(
-        label = { Text(text = label) },
+        label = { Text(text = stringResource(id = label)) },
         value = value,
         onValueChange = onChange,
-        modifier = modifier,
-        singleLine = true
+        singleLine = true,
+        isError = error,
+        modifier = modifier
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPetDateInput(
-    label: String,
+    @StringRes label: Int,
     value: String,
     isPickerOpen: Boolean,
     datePickerState: DatePickerState,
+    error: Boolean = false,
     onChange: (String) -> Unit,
     toggleDialog: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // TODO: Add click to TextField
     TextField(
-        label = { Text(text = label) },
+        label = { Text(text = stringResource(id = label)) },
         value = value,
         onValueChange = onChange,
         readOnly = true,
+        isError = error,
         trailingIcon = {
            IconButton(onClick = toggleDialog) {
                Icon(imageVector = Icons.Default.DateRange, contentDescription = "Date Picker")

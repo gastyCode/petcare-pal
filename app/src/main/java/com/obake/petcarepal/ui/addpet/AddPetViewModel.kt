@@ -18,6 +18,10 @@ class AddPetViewModel(private val petDao: PetDao, private val navController: Nav
         private set
 
     fun handleAddPet() {
+        if (state.petName.isBlank() || state.petSpecie.isBlank() || state.petBirthdate.isBlank()) {
+            state = state.copy(inputError = true)
+            return
+        }
         insert(state.petName, state.petSpecie, state.petBirthdate, state.petImage)
         navController.popBackStack()
         navController.navigate(Screen.Home.name)
@@ -32,15 +36,15 @@ class AddPetViewModel(private val petDao: PetDao, private val navController: Nav
     }
 
     fun setPetName(petName: String) {
-        state = state.copy(petName = petName)
+        state = state.copy(petName = petName, inputError = false)
     }
 
     fun setPetSpecie(petSpecie: String) {
-        state = state.copy(petSpecie = petSpecie)
+        state = state.copy(petSpecie = petSpecie, inputError = false)
     }
 
     fun setPetBirthdate(petBirthdate: String) {
-        state = state.copy(petBirthdate = petBirthdate)
+        state = state.copy(petBirthdate = petBirthdate, inputError = false)
     }
 
     fun insert(name: String, specie: String, birthdate: String, imageUrl: String) {

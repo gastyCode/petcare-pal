@@ -19,6 +19,8 @@ interface TipDao {
     suspend fun delete(tip: Tip)
     @Query("SELECT * FROM tips WHERE tip_id = :id")
     fun get(id: Long): Flow<Tip>
+    @Query("SELECT * FROM tips WHERE specie = :specie")
+    fun getAllBySpecie(specie: String): Flow<List<Tip>>
     @Query("SELECT * FROM tips")
     fun getAll(): Flow<List<Tip>>
 }

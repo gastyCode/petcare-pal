@@ -10,5 +10,6 @@ data class Tip(
     @ColumnInfo(name = "tip_id")
     val id: Long = 0,
     val title: String,
-    val description: String
+    val description: String,
+    val specie: String
 )

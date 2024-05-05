@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-@Database(entities = [Pet::class, Tip::class, Activity::class], version = 4)
+@Database(entities = [Pet::class, Tip::class, Activity::class], version = 5)
 abstract class ApplicationDatabase: RoomDatabase() {
     abstract fun petDao(): PetDao
     abstract fun tipDao(): TipDao
@@ -68,7 +68,8 @@ class PrepopulateCallback(private val context: Context): RoomDatabase.Callback()
                         Tip(
                             id = tip.getLong("id"),
                             title = tip.getString("title"),
-                            description = tip.getString("description")
+                            description = tip.getString("description"),
+                            specie = tip.getString("specie")
                         )
                     )
                 }

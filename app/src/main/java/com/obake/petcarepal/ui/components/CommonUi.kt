@@ -46,6 +46,7 @@ fun DropdownMenu(
     value: String,
     @StringRes label: Int,
     openDropdown: Boolean,
+    error: Boolean = false,
     toggleDropdown: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
@@ -60,6 +61,7 @@ fun DropdownMenu(
                 value = value,
                 onValueChange = { },
                 readOnly = true,
+                isError = error,
                 label = { Text(stringResource(label)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = openDropdown) }
             )

@@ -36,7 +36,7 @@ fun Application(context: Context) {
 
     val overviewViewModel = OverviewViewModel(database.petDao(), navController)
     val activitiesViewModel = ActivitiesViewModel(database.activityDao(), notificationScheduler)
-    val tipsViewModel = TipsViewModel(database.tipDao())
+    val tipsViewModel = TipsViewModel(database.tipDao(), database.petDao())
     val addPetViewModel = AddPetViewModel(database.petDao(), navController)
 
     PetCarePalTheme {

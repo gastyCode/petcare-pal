@@ -2,26 +2,199 @@
   {
     "id": 1,
     "title": "Start Training Early",
-    "description": "Puppies are eager to learn, so begin training basic commands like sit, stay, and come as soon as you bring them home. Positive reinforcement with treats and praise is key to successful training."
+    "description": "Puppies are eager to learn, so begin training basic commands like sit, stay, and come as soon as you bring them home. Positive reinforcement with treats and praise is key to successful training.",
+    "specie": "Dog"
   },
   {
     "id": 2,
     "title": "Provide Proper Exercise",
-    "description": "The amount of exercise your dog needs depends on their breed, age, and overall health. Daily walks, playtime, and mental stimulation are crucial for their physical and mental well-being."
+    "description": "The amount of exercise your dog needs depends on their breed, age, and overall health. Daily walks, playtime, and mental stimulation are crucial for their physical and mental well-being.",
+    "specie": "Dog"
   },
   {
     "id": 3,
     "title": "Establish a Consistent Routine",
-    "description":  "Dogs thrive on routine. Set consistent feeding times, walk schedules, and potty breaks. This helps them feel secure and prevents accidents or bad behavior."
+    "description":  "Dogs thrive on routine. Set consistent feeding times, walk schedules, and potty breaks. This helps them feel secure and prevents accidents or bad behavior.",
+    "specie": "Dog"
   },
   {
     "id": 4,
     "title": "Prioritize Preventative Care",
-    "description": "Regular vet checkups, vaccinations, and parasite control are essential for maintaining your dog's health. Early detection and prevention of potential health issues can save you money and heartache in the long run."
+    "description": "Regular vet checkups, vaccinations, and parasite control are essential for maintaining your dog's health. Early detection and prevention of potential health issues can save you money and heartache in the long run.",
+    "specie": "Dog"
   },
   {
     "id": 5,
     "title": "Show Plenty of Love and Affection",
-    "description": "Dogs are social creatures who crave love and attention. Spend quality time petting, playing, and cuddling with your dog. This strengthens your bond and creates a happy, well-adjusted canine companion."
+    "description": "Dogs are social creatures who crave love and attention. Spend quality time petting, playing, and cuddling with your dog. This strengthens your bond and creates a happy, well-adjusted canine companion.",
+    "specie": "Dog"
+  },
+  {
+    "id": 6,
+    "title": "Provide a Scratching Post",
+    "description": "Cats need to scratch to maintain their claws and mark their territory. Offer a sturdy scratching post to prevent them from scratching your furniture.",
+    "specie": "Cat"
+  },
+  {
+    "id": 7,
+    "title": "Keep Litter Box Clean",
+    "description": "Cats are very clean animals and prefer a clean litter box. Scoop waste daily and change the litter completely once a week.",
+    "specie": "Cat"
+  },
+  {
+    "id": 8,
+    "title": "Play Interactive Games",
+    "description": "Cats love to play and stalk. Engage them with interactive toys like feather wands or puzzle feeders.",
+    "specie": "Cat"
+  },
+  {
+    "id": 9,
+    "title": "Brush Regularly",
+    "description": "Regular brushing removes loose fur and prevents mats. It also helps distribute natural oils for a healthy coat.",
+    "specie": "Cat"
+  },
+  {
+    "id": 10,
+    "title": "Provide a Safe Outdoor Space",
+    "description": "If possible, give your cat access to a safe outdoor space, such as a catio or enclosed yard, where they can explore and enjoy the fresh air.",
+    "specie": "Cat"
+  },
+  {
+    "id": 11,
+    "title": "Offer Variety in Diet",
+    "description": "Parrots need a diverse diet that includes fruits, vegetables, seeds, and pellets. Avoid feeding them avocado, chocolate, caffeine, and alcohol, as these can be toxic to them.",
+    "specie": "Parrot"
+  },
+  {
+    "id": 12,
+    "title": "Provide Mental Stimulation",
+    "description": "Parrots are intelligent birds that require mental stimulation to prevent boredom and behavioral issues. Offer them toys, puzzles, and interactive games to keep them engaged.",
+    "specie": "Parrot"
+  },
+  {
+    "id": 13,
+    "title": "Allow for Social Interaction",
+    "description": "Parrots are social creatures and thrive on interaction with their human companions. Spend time talking, singing, and playing with your parrot to build a strong bond.",
+    "specie": "Parrot"
+  },
+  {
+    "id": 14,
+    "title": "Provide Proper Tank Setup",
+    "description": "Fish require a suitable tank with proper filtration, heating, and lighting. Research the specific needs of your fish species and provide an environment that mimics their natural habitat.",
+    "specie": "Fish"
+  },
+  {
+    "id": 15,
+    "title": "Maintain Water Quality",
+    "description": "Regularly test the water parameters in your fish tank and perform water changes as needed to maintain optimal water quality. This helps prevent diseases and keeps your fish healthy.",
+    "specie": "Fish"
+  },
+  {
+    "id": 16,
+    "title": "Provide Hiding Places",
+    "description": "Many fish species need hiding places in their tank to feel secure and reduce stress. Decorate your tank with rocks, plants, and caves to create hiding spots for your fish.",
+    "specie": "Fish"
+  },
+  {
+    "id": 17,
+    "title": "Offer Plenty of Chew Toys",
+    "description": "Rabbits have continuously growing teeth and need to chew to keep them worn down. Provide a variety of safe chew toys made from wood, cardboard, or natural fibers.",
+    "specie": "Rabbit"
+  },
+  {
+    "id": 18,
+    "title": "Provide Adequate Space to Exercise",
+    "description": "Rabbits are active animals that need space to hop, run, and explore. Ensure they have a large enough enclosure or free-roaming area where they can exercise daily.",
+    "specie": "Rabbit"
+  },
+  {
+    "id": 19,
+    "title": "Offer Fresh Hay Daily",
+    "description": "Hay is a vital part of a rabbit's diet and should be available at all times. It provides essential fiber for digestive health and helps wear down their teeth.",
+    "specie": "Rabbit"
+  },
+  {
+    "id": 20,
+    "title": "Provide a Wheel for Exercise",
+    "description": "Hamsters are active creatures that love to run. Offer them a suitable exercise wheel to keep them physically and mentally stimulated.",
+    "specie": "Hamster"
+  },
+  {
+    "id": 21,
+    "title": "Ensure Proper Ventilation",
+    "description": "Hamsters are sensitive to heat and require a well-ventilated cage to prevent overheating. Avoid placing their cage in direct sunlight or near heat sources.",
+    "specie": "Hamster"
+  },
+  {
+    "id": 22,
+    "title": "Offer a Variety of Vegetables",
+    "description": "Guinea pigs need a diet rich in fresh vegetables to stay healthy. Offer them a variety of veggies such as bell peppers, lettuce, and carrots, but avoid feeding them iceberg lettuce and onions.",
+    "specie": "GuineaPig"
+  },
+  {
+    "id": 23,
+    "title": "Provide Timothy Hay",
+    "description": "Timothy hay is essential for guinea pigs' digestive health and dental wear. Make sure it's always available in their habitat.",
+    "specie": "GuineaPig"
+  },
+  {
+    "id": 24,
+    "title": "Socialize Regularly",
+    "description": "Guinea pigs are social animals and thrive in the company of their own kind. Consider adopting a pair or group of guinea pigs to provide companionship and prevent loneliness.",
+    "specie": "GuineaPig"
+  },
+  {
+    "id": 25,
+    "title": "Provide Chew Toys",
+    "description": "Ferrets have a natural instinct to chew and need appropriate toys to satisfy this behavior. Offer them a variety of safe chew toys made from rubber, wood, or fabric.",
+    "specie": "Ferret"
+  },
+  {
+    "id": 26,
+    "title": "Create a Safe Environment",
+    "description": "Ferrets are curious and agile animals that can get into mischief if their environment is not properly secured. Ferret-proof your home by blocking off small spaces, securing cabinets, and removing hazardous items.",
+    "specie": "Ferret"
+  },
+  {
+    "id": 27,
+    "title": "Offer a Variety of Foods",
+    "description": "Reptiles have different dietary needs depending on their species. Research the specific dietary requirements of your reptile and offer a variety of live insects, fruits, vegetables, and commercial reptile food.",
+    "specie": "Reptile"
+  },
+  {
+    "id": 28,
+    "title": "Provide Proper Heating and Lighting",
+    "description": "Reptiles are ectothermic and rely on external heat sources to regulate their body temperature. Invest in quality heat lamps, heat pads, and UVB lighting to create a suitable habitat for your reptile.",
+    "specie": "Reptile"
+  },
+  {
+    "id": 29,
+    "title": "Maintain Humidity Levels",
+    "description": "Many reptile species require specific humidity levels to thrive. Monitor and adjust the humidity in their enclosure using misters, humidifiers, or substrate moisture.",
+    "specie": "Reptile"
+  },
+  {
+    "id": 30,
+    "title": "Provide a Source of Clean Water",
+    "description": "Amphibians absorb water through their skin and require a clean water source to stay hydrated. Use dechlorinated water and change it regularly to prevent bacterial growth.",
+    "specie": "Amphibian"
+  },
+  {
+    "id": 31,
+    "title": "Maintain Proper Temperature",
+    "description": "Amphibians are sensitive to temperature changes and need a stable thermal gradient in their habitat. Use heat lamps, heat mats, or ceramic heaters to maintain the appropriate temperature range.",
+    "specie": "Amphibian"
+  },
+  {
+    "id": 32,
+    "title": "Provide Hiding Places",
+    "description": "Amphibians often seek shelter to feel secure and reduce stress. Include various hiding spots such as caves, plants, and logs in their enclosure.",
+    "specie": "Amphibian"
+  },
+  {
+    "id": 33,
+    "title": "Research Specific Needs",
+    "description": "Each species of fish, reptile, amphibian, and other exotic pets has unique requirements. Take the time to research and understand the specific needs of your pet to ensure their health and well-being.",
+    "specie": "Other"
   }
 ]
