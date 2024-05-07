@@ -9,18 +9,18 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.obake.petcarepal.data.dao.PetDao
 import com.obake.petcarepal.data.dao.TipDao
+import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.data.model.Tip
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
-class TipsViewModel(private val tipDao: TipDao, private val petDao: PetDao): ViewModel() {
+class TipsViewModel(private val tipDao: TipDao, pet: Pet): ViewModel() {
     var state by mutableStateOf(TipsState())
         private set
 
     init {
         viewModelScope.launch {
-            // TODO: Specie by current pet
-            tipDao.getAllBySpecie("Dog").asLiveData().observeForever {
+            tipDao.getAllBySpecie(pet.specie).asLiveData().observeForever {
                 state = state.copy(tips = it, currentTip = it.firstOrNull())
             }
         }

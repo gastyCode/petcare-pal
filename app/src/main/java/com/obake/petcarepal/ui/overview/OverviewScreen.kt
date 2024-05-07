@@ -46,14 +46,10 @@ import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.util.StorageHelper
 
 @Composable
-fun OverviewScreen(overviewViewModel: OverviewViewModel, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
-    val pets: State<List<Pet>?> = overviewViewModel.pets.observeAsState()
-    val pet = pets.value?.getOrNull(0)
+fun OverviewScreen(pet: Pet, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
 
     Box(modifier = Modifier.then(modifier)) {
-        pet?.let {
-            PetOverview(pet.name, pet.specie, pet.birthdate, pet.imageUrl, storageHelper)
-        }
+        PetOverview(pet.name, pet.specie, pet.birthdate, pet.imageUrl, storageHelper)
     }
 }
 

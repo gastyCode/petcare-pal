@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
+import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 
 @Composable

@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.obake.petcarepal.data.ApplicationDatabase
 import com.obake.petcarepal.data.Screen
+import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.ui.activities.ActivitiesScreen
 import com.obake.petcarepal.ui.activities.ActivitiesViewModel
 import com.obake.petcarepal.ui.addpet.AddPetScreen
@@ -20,7 +21,6 @@ import com.obake.petcarepal.ui.addpet.AddPetViewModel
 import com.obake.petcarepal.ui.calendar.CalendarScreen
 import com.obake.petcarepal.ui.components.Navigation
 import com.obake.petcarepal.ui.overview.OverviewScreen
-import com.obake.petcarepal.ui.overview.OverviewViewModel
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.ui.tips.TipsScreen
 import com.obake.petcarepal.ui.tips.TipsViewModel
@@ -28,15 +28,13 @@ import com.obake.petcarepal.util.StorageHelper
 import com.obake.petcarepal.worker.NotificationScheduler
 
 @Composable
-fun Application(context: Context) {
+fun Application(context: Context, pet: Pet?) {
     val database = ApplicationDatabase.getDatabase(context)
     val notificationScheduler = NotificationScheduler(context)
     val storageHelper = StorageHelper()
     val navController = rememberNavController()
 
-    val overviewViewModel = OverviewViewModel(database.petDao(), navController)
     val activitiesViewModel = ActivitiesViewModel(database.activityDao(), notificationScheduler)
-    val tipsViewModel = TipsViewModel(database.tipDao(), database.petDao())
     val addPetViewModel = AddPetViewModel(database.petDao(), navController)
 
     PetCarePalTheme {
@@ -45,18 +43,19 @@ fun Application(context: Context) {
         ) {
             Scaffold(
                 bottomBar = {
-                    // TODO: Hide bottom bar on AddPetScreen
-                    BottomAppBar {
-                        Navigation(navController = navController)
+                    if (pet != null) {
+                        BottomAppBar {
+                            Navigation(navController = navController)
+                        }
                     }
                 }
             ) { padding ->
-                NavHost(navController = navController, startDestination = Screen.Home.name) {
+                NavHost(navController = navController, startDestination = if (pet == null) Screen.AddPet.name else Screen.Home.name) {
                     composable(Screen.AddPet.name) {
                         AddPetScreen(addPetViewModel, storageHelper, modifier = Modifier.padding(padding))
                     }
                     composable(Screen.Home.name) {
-                        OverviewScreen(overviewViewModel, storageHelper, modifier = Modifier.padding(padding))
+                        OverviewScreen(pet!!, storageHelper, modifier = Modifier.padding(padding))
                     }
                     composable(Screen.Activities.name) {
                         ActivitiesScreen(activitiesViewModel, modifier = Modifier.padding(padding))
@@ -65,6 +64,7 @@ fun Application(context: Context) {
                         CalendarScreen(modifier = Modifier.padding(padding))
                     }
                     composable(Screen.Tips.name) {
+                        val tipsViewModel = TipsViewModel(database.tipDao(), pet!!)
                         TipsScreen(tipsViewModel, modifier = Modifier.padding(padding))
                     }
                 }
