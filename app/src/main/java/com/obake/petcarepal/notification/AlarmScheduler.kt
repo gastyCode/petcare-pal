@@ -38,7 +38,7 @@ class AlarmScheduler(private val context: Context) {
     }
 
     @SuppressLint("ScheduleExactAlarm")
-    fun scheduleCalendar(message: String, time: Long, id: Int) {
+    fun scheduleEvent(message: String, time: Long, id: Int) {
         val intent = Intent(context, CalendarAlarmReceiver::class.java).apply {
             putExtra("message", message)
             putExtra("id", id)
@@ -66,7 +66,7 @@ class AlarmScheduler(private val context: Context) {
         )
     }
 
-    fun cancelCalendar(id: Int) {
+    fun cancelEvent(id: Int) {
         alarmManager.cancel(
             PendingIntent.getBroadcast(
                 context,

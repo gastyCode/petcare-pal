@@ -71,23 +71,13 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val alar
     fun insert(name: String, type: String, icon: Int) {
         viewModelScope.launch {
             val time = DateHelper.timeStateToMillis(state.timePickerState)
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = time
-
-            val format = SimpleDateFormat("HH:mm")
-            val timeString = format.format(calendar.time)
+            val timeString = DateHelper.timeStateToTime(state.timePickerState)
 
             val activity = Activity(0, name, timeString, type, icon)
             activityDao.insert(activity)
             alarmScheduler.scheduleActivity(activity.name, time, activity.hashCode())
 
             resetDialog()
-        }
-    }
-
-    fun update(activity: Activity) {
-        viewModelScope.launch {
-            activityDao.update(activity)
         }
     }
 

@@ -1,25 +1,49 @@
 package com.obake.petcarepal.ui.components
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TimeInput
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.obake.petcarepal.R
+import com.obake.petcarepal.data.ActivityIcons
 import com.obake.petcarepal.data.NavigationScreen
+import com.obake.petcarepal.ui.activities.ActivitiesState
+import com.obake.petcarepal.ui.activities.ActivitiesViewModel
 
 @Composable
 fun Navigation(navController: NavController) {
@@ -72,5 +96,180 @@ fun DropdownMenu(
                 content()
             }
         }
+    }
+}
+
+@Composable
+fun AddItemButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.add))
+        }
+    }
+}
+
+@Composable
+fun ItemCard(name: String, time: String, type: String? = null, icon: Int? = null, onRemove: () -> Unit, modifier: Modifier = Modifier) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (icon != null && type != null) {
+                    Icon(
+                        painter = painterResource(id = icon),
+                        contentDescription = type,
+                        modifier = Modifier
+                            .size(48.dp)
+                            .padding(end = 8.dp)
+                    )
+                }
+                Column {
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        text = time,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+            Button(onClick = onRemove) {
+                Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(id = R.string.remove))
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddItemWithIconDialog(
+    openDialog: Boolean,
+    openDropdown: Boolean,
+    nameValue: String,
+    iconValue: String,
+    @StringRes label: Int,
+    timePickerState: TimePickerState,
+    onAdd: () -> Unit,
+    toggleDialog: () -> Unit,
+    toggleDropdown: () -> Unit,
+    onNameChange: (String) -> Unit,
+    onIconChange: (String, Int) -> Unit
+) {
+    if (openDialog) {
+        AlertDialog(
+            onDismissRequest = toggleDialog,
+            dismissButton = {
+                Button(onClick = toggleDialog) {
+                    Text(text = stringResource(id = R.string.cancel))
+                } },
+            confirmButton = {
+                Button(onClick = onAdd) {
+                    Text(text = stringResource(id = R.string.add))
+                } },
+            title = { Text(text = stringResource(id = label)) },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    TextField(
+                        value = nameValue,
+                        onValueChange = onNameChange,
+                        label = { Text(stringResource(R.string.activity_name)) }
+                    )
+                    DropdownMenu(
+                        value = iconValue,
+                        label = label,
+                        openDropdown = openDropdown,
+                        toggleDropdown = toggleDropdown
+                    ) {
+                        ActivityIcons.entries.forEach { icon ->
+                            DropdownMenuItem(
+                                text = {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = icon.icon),
+                                            contentDescription = stringResource(id = icon.resName),
+                                            modifier = Modifier.size(24.dp)
+                                        )
+                                        Text(text = stringResource(id = icon.resName))
+                                    }
+                                },
+                                onClick = {
+                                    onIconChange(icon.name, icon.icon)
+                                    toggleDropdown()
+                                },
+                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                            )
+                        }
+                    }
+                    TimeInput(
+                        state = timePickerState
+                    )
+                }
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddItemDialog(
+    openDialog: Boolean,
+    nameValue: String,
+    @StringRes label: Int,
+    timePickerState: TimePickerState,
+    onAdd: () -> Unit,
+    toggleDialog: () -> Unit,
+    onNameChange: (String) -> Unit
+) {
+    if (openDialog) {
+        AlertDialog(
+            onDismissRequest = toggleDialog,
+            dismissButton = {
+                Button(onClick = toggleDialog) {
+                    Text(text = stringResource(id = R.string.cancel))
+                } },
+            confirmButton = {
+                Button(onClick = onAdd) {
+                    Text(text = stringResource(id = R.string.add))
+                } },
+            title = { Text(text = stringResource(id = label)) },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    TextField(
+                        value = nameValue,
+                        onValueChange = onNameChange,
+                        // TODO: Custom label
+                        label = { Text(stringResource(R.string.activity_name)) }
+                    )
+                    TimeInput(
+                        state = timePickerState
+                    )
+                }
+            }
+        )
     }
 }

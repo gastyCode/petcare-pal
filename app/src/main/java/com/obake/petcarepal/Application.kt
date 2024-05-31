@@ -19,8 +19,9 @@ import com.obake.petcarepal.ui.activities.ActivitiesScreen
 import com.obake.petcarepal.ui.activities.ActivitiesViewModel
 import com.obake.petcarepal.ui.addpet.AddPetScreen
 import com.obake.petcarepal.ui.addpet.AddPetViewModel
-import com.obake.petcarepal.ui.calendar.CalendarScreen
+import com.obake.petcarepal.ui.events.EventsScreen
 import com.obake.petcarepal.ui.components.Navigation
+import com.obake.petcarepal.ui.events.EventsViewModel
 import com.obake.petcarepal.ui.overview.OverviewScreen
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.ui.tips.TipsScreen
@@ -35,6 +36,7 @@ fun Application(context: Context, pet: Pet?) {
     val navController = rememberNavController()
 
     val activitiesViewModel = ActivitiesViewModel(database.activityDao(), alarmScheduler)
+    val eventsViewModel = EventsViewModel(database.eventDao(), alarmScheduler)
     val addPetViewModel = AddPetViewModel(database.petDao(), navController)
 
     PetCarePalTheme {
@@ -50,6 +52,7 @@ fun Application(context: Context, pet: Pet?) {
                     }
                 }
             ) { padding ->
+                // TODO: Fix missing navigation
                 NavHost(navController = navController, startDestination = if (pet == null) Screen.AddPet.name else Screen.Home.name) {
                     composable(Screen.AddPet.name) {
                         AddPetScreen(addPetViewModel, storageHelper, modifier = Modifier.padding(padding))
@@ -60,8 +63,8 @@ fun Application(context: Context, pet: Pet?) {
                     composable(Screen.Activities.name) {
                         ActivitiesScreen(activitiesViewModel, modifier = Modifier.padding(padding))
                     }
-                    composable(Screen.Calendar.name) {
-                        CalendarScreen(modifier = Modifier.padding(padding))
+                    composable(Screen.Events.name) {
+                        EventsScreen(eventsViewModel, modifier = Modifier.padding(padding))
                     }
                     composable(Screen.Tips.name) {
                         val tipsViewModel = TipsViewModel(database.tipDao(), pet!!)

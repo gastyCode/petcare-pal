@@ -8,9 +8,11 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.dao.ActivityDao
+import com.obake.petcarepal.data.dao.EventDao
 import com.obake.petcarepal.data.dao.PetDao
 import com.obake.petcarepal.data.dao.TipDao
 import com.obake.petcarepal.data.model.Activity
+import com.obake.petcarepal.data.model.Event
 import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.data.model.Tip
 import kotlinx.coroutines.CoroutineScope
@@ -18,11 +20,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-@Database(entities = [Pet::class, Tip::class, Activity::class], version = 5)
+@Database(entities = [Pet::class, Tip::class, Activity::class, Event::class], version = 6)
 abstract class ApplicationDatabase: RoomDatabase() {
     abstract fun petDao(): PetDao
     abstract fun tipDao(): TipDao
     abstract fun activityDao(): ActivityDao
+    abstract fun eventDao(): EventDao
 
     companion object {
         @Volatile
@@ -57,7 +60,7 @@ class PrepopulateCallback(private val context: Context): RoomDatabase.Callback()
         try {
             val tipDao = ApplicationDatabase.getDatabase(context).tipDao()
 
-            val tipList: JSONArray = context.resources.openRawResource(R.raw.tips).use {
+            val tipList: JSONArray = context.resources.openRawResource(R.raw.tips).use { it ->
                 JSONArray(it.bufferedReader().use { it.readText() })
             }
 
