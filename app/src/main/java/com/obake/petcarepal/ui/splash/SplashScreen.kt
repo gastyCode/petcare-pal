@@ -26,7 +26,7 @@ fun SplashScreen(splashViewModel: SplashViewModel) {
     val petState = splashViewModel.pets.observeAsState(initial = null)
 
     LaunchedEffect(key1 = true) {
-        delay(2000)
+        delay(1000)
 
         val pet = petState.value?.firstOrNull()
 

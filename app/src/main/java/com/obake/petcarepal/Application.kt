@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.obake.petcarepal.data.ApplicationDatabase
 import com.obake.petcarepal.data.Screen
 import com.obake.petcarepal.data.model.Pet
+import com.obake.petcarepal.notification.AlarmScheduler
 import com.obake.petcarepal.ui.activities.ActivitiesScreen
 import com.obake.petcarepal.ui.activities.ActivitiesViewModel
 import com.obake.petcarepal.ui.addpet.AddPetScreen
@@ -25,16 +26,15 @@ import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.ui.tips.TipsScreen
 import com.obake.petcarepal.ui.tips.TipsViewModel
 import com.obake.petcarepal.util.StorageHelper
-import com.obake.petcarepal.worker.NotificationScheduler
 
 @Composable
 fun Application(context: Context, pet: Pet?) {
     val database = ApplicationDatabase.getDatabase(context)
-    val notificationScheduler = NotificationScheduler(context)
+    val alarmScheduler = AlarmScheduler(context)
     val storageHelper = StorageHelper()
     val navController = rememberNavController()
 
-    val activitiesViewModel = ActivitiesViewModel(database.activityDao(), notificationScheduler)
+    val activitiesViewModel = ActivitiesViewModel(database.activityDao(), alarmScheduler)
     val addPetViewModel = AddPetViewModel(database.petDao(), navController)
 
     PetCarePalTheme {
