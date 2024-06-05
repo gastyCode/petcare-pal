@@ -41,6 +41,7 @@ import java.util.Calendar
 fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier) {
     val state = eventsViewModel.state
     val calendarState = rememberDatePickerState(initialSelectedDateMillis = Calendar.getInstance().timeInMillis)
+
     var openDialog by rememberSaveable { mutableStateOf(false) }
     var calendarVisible by rememberSaveable { mutableStateOf(true) }
 
