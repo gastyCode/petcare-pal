@@ -52,7 +52,6 @@ fun Application(context: Context, pet: Pet?) {
                     }
                 }
             ) { padding ->
-                // TODO: Fix missing navigation
                 NavHost(navController = navController, startDestination = if (pet == null) Screen.AddPet.name else Screen.Home.name) {
                     composable(Screen.AddPet.name) {
                         AddPetScreen(addPetViewModel, storageHelper, modifier = Modifier.padding(padding))

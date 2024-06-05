@@ -1,5 +1,6 @@
 package com.obake.petcarepal.ui.activities
 
+import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.getValue

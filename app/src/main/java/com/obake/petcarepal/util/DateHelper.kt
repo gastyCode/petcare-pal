@@ -1,5 +1,6 @@
 package com.obake.petcarepal.util
 
+import android.util.Log
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TimePickerState
@@ -19,6 +20,7 @@ object DateHelper {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
         calendar.set(Calendar.MINUTE, timePickerState.minute)
+        calendar.set(Calendar.SECOND, 0)
         return calendar.timeInMillis
     }
 
@@ -28,6 +30,7 @@ object DateHelper {
         calendar.timeInMillis = datePickerState.selectedDateMillis ?: 0
         calendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
         calendar.set(Calendar.MINUTE, timePickerState.minute)
+        calendar.set(Calendar.SECOND, 0)
         return calendar.timeInMillis
     }
 

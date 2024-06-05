@@ -1,5 +1,6 @@
 package com.obake.petcarepal.ui.components
 
+import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -72,7 +73,7 @@ fun DropdownMenu(
     openDropdown: Boolean,
     error: Boolean = false,
     toggleDropdown: () -> Unit,
-    modifier: Modifier = Modifier,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     Column(modifier = modifier) {
@@ -115,7 +116,9 @@ fun AddItemButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ItemCard(name: String, time: String, type: String? = null, icon: Int? = null, onRemove: () -> Unit, modifier: Modifier = Modifier) {
+fun ItemCard(name: String, time: String, type: String? = null, icon: Int? = null, onRemove: () -> Unit, @SuppressLint(
+    "ModifierParameter"
+) modifier: Modifier = Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -163,9 +166,10 @@ fun ItemCard(name: String, time: String, type: String? = null, icon: Int? = null
 fun AddItemWithIconDialog(
     openDialog: Boolean,
     openDropdown: Boolean,
+    @StringRes nameLabel: Int,
     nameValue: String,
     iconValue: String,
-    @StringRes label: Int,
+    @StringRes titleLabel: Int,
     timePickerState: TimePickerState,
     onAdd: () -> Unit,
     toggleDialog: () -> Unit,
@@ -184,7 +188,7 @@ fun AddItemWithIconDialog(
                 Button(onClick = onAdd) {
                     Text(text = stringResource(id = R.string.add))
                 } },
-            title = { Text(text = stringResource(id = label)) },
+            title = { Text(text = stringResource(id = titleLabel)) },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -192,11 +196,11 @@ fun AddItemWithIconDialog(
                     TextField(
                         value = nameValue,
                         onValueChange = onNameChange,
-                        label = { Text(stringResource(R.string.activity_name)) }
+                        label = { Text(stringResource(id = nameLabel)) }
                     )
                     DropdownMenu(
                         value = iconValue,
-                        label = label,
+                        label = titleLabel,
                         openDropdown = openDropdown,
                         toggleDropdown = toggleDropdown
                     ) {
@@ -236,8 +240,9 @@ fun AddItemWithIconDialog(
 @Composable
 fun AddItemDialog(
     openDialog: Boolean,
+    @StringRes nameLabel: Int,
     nameValue: String,
-    @StringRes label: Int,
+    @StringRes titleLabel: Int,
     timePickerState: TimePickerState,
     onAdd: () -> Unit,
     toggleDialog: () -> Unit,
@@ -254,7 +259,7 @@ fun AddItemDialog(
                 Button(onClick = onAdd) {
                     Text(text = stringResource(id = R.string.add))
                 } },
-            title = { Text(text = stringResource(id = label)) },
+            title = { Text(text = stringResource(id = titleLabel)) },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -262,8 +267,7 @@ fun AddItemDialog(
                     TextField(
                         value = nameValue,
                         onValueChange = onNameChange,
-                        // TODO: Custom label
-                        label = { Text(stringResource(R.string.activity_name)) }
+                        label = { Text(stringResource(id = nameLabel)) }
                     )
                     TimeInput(
                         state = timePickerState

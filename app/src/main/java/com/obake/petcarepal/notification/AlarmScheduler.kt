@@ -5,6 +5,12 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.provider.AlarmClock
+import android.provider.Settings
+import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.getSystemService
 import java.util.Calendar
 
 class AlarmScheduler(private val context: Context) {
@@ -39,11 +45,20 @@ class AlarmScheduler(private val context: Context) {
 
     @SuppressLint("ScheduleExactAlarm")
     fun scheduleEvent(message: String, time: Long, id: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = context.getSystemService<AlarmManager>()!!
+            when {
+                !alarmManager.canScheduleExactAlarms() -> {
+                    context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                }
+            }
+        }
+
         val intent = Intent(context, CalendarAlarmReceiver::class.java).apply {
             putExtra("message", message)
             putExtra("id", id)
         }
-        alarmManager.setExact(
+        alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             time,
             PendingIntent.getBroadcast(

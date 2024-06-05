@@ -16,10 +16,11 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,41 +33,55 @@ import com.obake.petcarepal.ui.components.AddItemButton
 import com.obake.petcarepal.ui.components.AddItemDialog
 import com.obake.petcarepal.ui.components.ItemCard
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
-import java.util.Locale
+import com.obake.petcarepal.util.DateHelper
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier) {
     val state = eventsViewModel.state
+    val calendarState = rememberDatePickerState(initialSelectedDateMillis = Calendar.getInstance().timeInMillis)
+    var openDialog by rememberSaveable { mutableStateOf(false) }
+    var calendarVisible by rememberSaveable { mutableStateOf(true) }
+
+    eventsViewModel.updateEvents(DateHelper.dateStateToDate(calendarState))
 
     AddItemDialog(
-        openDialog = state.openDialog,
+        openDialog = openDialog,
         nameValue = state.eventName,
-        label = R.string.add_event,
+        nameLabel = R.string.event_name,
+        titleLabel = R.string.add_event,
         timePickerState = state.timePickerState,
-        onAdd = { eventsViewModel.insert(state.eventName) },
-        toggleDialog = eventsViewModel::toggleDialog,
+        onAdd = {
+            eventsViewModel.insert(state.eventName, calendarState)
+            openDialog = false
+                },
+        toggleDialog = { openDialog = !openDialog },
         onNameChange = eventsViewModel::setEventName
     )
 
     Box(modifier = Modifier.then(modifier)) {
         Column {
             ToggleButton(
-                onIcon = Icons.Default.KeyboardArrowDown,
-                offIcon = Icons.Default.KeyboardArrowUp,
-                isOn = state.openCalendar,
-                onSwitch = eventsViewModel::toggleCalendar
+                onIcon = Icons.Default.KeyboardArrowUp,
+                offIcon = Icons.Default.KeyboardArrowDown,
+                isOn = calendarVisible,
+                onSwitch = { calendarVisible = !calendarVisible },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Calendar(
-                state.openDialog,
-                state.datePickerState
+                calendarVisible,
+                calendarState
             )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 AddItemButton(
-                    onClick = eventsViewModel::toggleDialog,
+                    onClick = {
+                        eventsViewModel.updateTimePickerState()
+                        openDialog = !openDialog
+                    },
                     modifier = Modifier
                         .padding(8.dp)
                         .align(Alignment.End)
@@ -108,8 +123,11 @@ fun Calendar(isVisible: Boolean, datePickerState: DatePickerState, modifier: Mod
 }
 
 @Composable
-fun ToggleButton(onIcon: ImageVector, offIcon: ImageVector, isOn: Boolean = false, onSwitch: () -> Unit) {
-    Button(onClick = onSwitch) {
+fun ToggleButton(onIcon: ImageVector, offIcon: ImageVector, onSwitch: () -> Unit, modifier: Modifier = Modifier, isOn: Boolean = false) {
+    Button(
+        onClick = onSwitch,
+        modifier = modifier
+    ) {
         if (isOn) {
             Icon(imageVector = onIcon, contentDescription = "On")
         } else {

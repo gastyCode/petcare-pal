@@ -26,24 +26,19 @@ fun SplashScreen(splashViewModel: SplashViewModel) {
     val petState = splashViewModel.pets.observeAsState(initial = null)
 
     LaunchedEffect(key1 = true) {
-        delay(1000)
+        delay(100)
 
         val pet = petState.value?.firstOrNull()
 
         val intent = Intent(context, MainActivity::class.java)
         intent.putExtra("pet", pet)
-        Log.d("SplashMan", pet.toString())
         startActivity(context, intent, null)
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Blue),
+            .background(color = Color.White),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = null
-        )
     }
 }
