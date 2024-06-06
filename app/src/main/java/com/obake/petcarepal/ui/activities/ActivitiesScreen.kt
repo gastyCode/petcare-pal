@@ -1,9 +1,6 @@
 package com.obake.petcarepal.ui.activities
 
-import android.content.res.Resources
-import android.content.res.Resources.Theme
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -77,8 +74,6 @@ fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifie
 
 @Composable
 fun ActivityList(list: List<Activity>, deleteActivity: (Activity) -> Unit, toggleDialog: () -> Unit, modifier: Modifier = Modifier) {
-    val sortedList = list.sortedBy { it.time }
-
     Card(
         modifier = Modifier.then(modifier),
         colors = CardDefaults.cardColors(
@@ -87,9 +82,10 @@ fun ActivityList(list: List<Activity>, deleteActivity: (Activity) -> Unit, toggl
     ) {
         LazyColumn(
             contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(sortedList) { activity ->
+            items(list) { activity ->
                 ItemCard(
                     name = activity.name,
                     time = activity.time,
@@ -98,13 +94,13 @@ fun ActivityList(list: List<Activity>, deleteActivity: (Activity) -> Unit, toggl
                     onRemove = { deleteActivity(activity) }
                 )
             }
+            item {
+                AddItemButton(
+                    onClick = toggleDialog,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
         }
-        AddItemButton(
-            onClick = toggleDialog,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(0.dp, 0.dp, 0.dp, 8.dp)
-        )
     }
 }
 

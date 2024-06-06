@@ -28,7 +28,7 @@ class EventsViewModel(private val eventDao: EventDao, private val alarmScheduler
     fun updateEvents(date: String) {
         viewModelScope.launch {
             state = state.copy(
-                events = eventDao.getAllByDate(date).first()
+                events = eventDao.getAllByDate(date).first().sortedBy { it.time }
             )
         }
     }

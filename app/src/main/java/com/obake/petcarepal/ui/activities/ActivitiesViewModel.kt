@@ -26,7 +26,7 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val alar
         viewModelScope.launch {
             activityDao.getAll().asLiveData().observeForever {
                 state = state.copy(
-                    activities = it,
+                    activities = it.sortedBy { a -> a.time },
                     openDialog = false,
                     openDropdown = false,
                     timePickerState = state.timePickerState
