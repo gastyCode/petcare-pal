@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,17 +14,20 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.model.Activity
 import com.obake.petcarepal.ui.components.AddItemButton
 import com.obake.petcarepal.ui.components.AddItemWithIconDialog
+import com.obake.petcarepal.ui.components.Background
 import com.obake.petcarepal.ui.components.ItemCard
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 
@@ -50,12 +54,7 @@ fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifie
     Box(
         modifier = Modifier.then(modifier)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.bg),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
-        )
+        Background(modifier = Modifier.matchParentSize())
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -66,7 +65,9 @@ fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifie
                 state.activities,
                 activitiesViewModel::delete,
                 activitiesViewModel::toggleDialog,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             )
         }
     }
@@ -80,10 +81,18 @@ fun ActivityList(list: List<Activity>, deleteActivity: (Activity) -> Unit, toggl
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
+        Text(
+            text = stringResource(id = R.string.planned_activities),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(0.dp, 4.dp, 0.dp, 0.dp)
+        )
         LazyColumn(
             contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
         ) {
             items(list) { activity ->
                 ItemCard(
@@ -96,8 +105,7 @@ fun ActivityList(list: List<Activity>, deleteActivity: (Activity) -> Unit, toggl
             }
             item {
                 AddItemButton(
-                    onClick = toggleDialog,
-                    modifier = Modifier.padding(8.dp)
+                    onClick = toggleDialog
                 )
             }
         }

@@ -2,6 +2,7 @@ package com.obake.petcarepal.ui.components
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -48,6 +50,16 @@ import com.obake.petcarepal.data.ActivityIcons
 import com.obake.petcarepal.data.NavigationScreen
 import com.obake.petcarepal.ui.activities.ActivitiesState
 import com.obake.petcarepal.ui.activities.ActivitiesViewModel
+
+@Composable
+fun Background(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.bg),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+    )
+}
 
 @Composable
 fun Navigation(navController: NavController) {
@@ -82,10 +94,12 @@ fun DropdownMenu(
     Column(modifier = modifier) {
         ExposedDropdownMenuBox(
             expanded = openDropdown,
-            onExpandedChange = { toggleDropdown() },
+            onExpandedChange = { toggleDropdown() }
         ) {
             TextField(
-                modifier = Modifier.menuAnchor(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
                 value = value,
                 onValueChange = { },
                 readOnly = true,
@@ -95,7 +109,7 @@ fun DropdownMenu(
             )
             ExposedDropdownMenu(
                 expanded = openDropdown,
-                onDismissRequest = { toggleDropdown() },
+                onDismissRequest = { toggleDropdown() }
             ) {
                 content()
             }

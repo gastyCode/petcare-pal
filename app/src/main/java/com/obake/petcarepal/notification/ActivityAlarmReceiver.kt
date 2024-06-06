@@ -8,9 +8,10 @@ class ActivityAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
         val activityNotificationService = ActivityNotificationService(context)
-        val message = intent?.getStringExtra("message") ?: return
+        val title = intent?.getStringExtra("title") ?: return
+        val message = intent.getStringExtra("message") ?: return
         val id = intent.getIntExtra("id", 0)
 
-        activityNotificationService.showNotification(message, id)
+        activityNotificationService.showNotification(title, message, id)
     }
 }

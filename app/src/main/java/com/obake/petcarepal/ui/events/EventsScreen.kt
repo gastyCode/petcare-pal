@@ -38,12 +38,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.model.Event
 import com.obake.petcarepal.ui.components.AddItemButton
 import com.obake.petcarepal.ui.components.AddItemDialog
+import com.obake.petcarepal.ui.components.Background
 import com.obake.petcarepal.ui.components.ItemCard
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.util.DateHelper
@@ -79,12 +81,7 @@ fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier
             .fillMaxSize()
             .then(modifier)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.bg),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
-        )
+        Background(modifier = Modifier.matchParentSize())
         Column {
             Card(
                 modifier = Modifier
@@ -138,7 +135,7 @@ fun EventList(list: List<Event>, deleteEvent: (Event) -> Unit, onClick: () -> Un
         )
     ) {
         Text(
-            text = "Planned Events",
+            text = stringResource(id = R.string.planned_events),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )

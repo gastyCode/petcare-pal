@@ -11,7 +11,7 @@ import com.obake.petcarepal.R
 abstract class NotificationService(private val context: Context) {
     private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    fun showNotification(message: String, id: Int) {
+    fun showNotification(title: String, message: String, id: Int) {
         val intent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -23,7 +23,7 @@ abstract class NotificationService(private val context: Context) {
             ActivityNotificationService.ACTIVITY_CHANNEL_ID
         )
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(context.getString(R.string.app_name))
+            .setContentTitle(title)
             .setContentText(message)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

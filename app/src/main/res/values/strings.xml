@@ -14,6 +14,10 @@
     <string name="event_name">Event Name</string>
     <string name="add_activity">Add Activity</string>
     <string name="add_event">Add Event</string>
+    <string name="planned_event">Planned Event</string>
+    <string name="planned_events">Planned Events</string>
+    <string name="planned_activity">Planned Activity</string>
+    <string name="planned_activities">Planned Activities</string>
     // Notification channels
     <string name="activity_channel_name">Activity</string>
     <string name="activity_channel_desc">Used for activity notifications.</string>

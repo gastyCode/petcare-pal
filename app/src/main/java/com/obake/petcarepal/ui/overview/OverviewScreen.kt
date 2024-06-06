@@ -1,6 +1,7 @@
 package com.obake.petcarepal.ui.overview
 
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -39,41 +42,79 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.model.Pet
+import com.obake.petcarepal.ui.components.Background
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
+import com.obake.petcarepal.util.DateHelper
 import com.obake.petcarepal.util.StorageHelper
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Formatter
 
 @Composable
 fun OverviewScreen(pet: Pet, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
+    val date = LocalDate.parse(pet.birthdate, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    val age = Period.between(date, LocalDate.now()).years
 
-    Box(modifier = Modifier.then(modifier)) {
-        PetOverview(pet.name, pet.specie, pet.birthdate, pet.imageUrl, storageHelper)
+    Box(
+        modifier = modifier
+    ) {
+        Background(modifier = Modifier.matchParentSize())
+        PetOverview(
+            pet.name,
+            age,
+            pet.specie,
+            pet.birthdate,
+            pet.imageUrl,
+            storageHelper,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        )
     }
 }
 
 @Composable
-fun PetOverview(name: String, type: String, date: String, imageUrl: String, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifier)
+fun PetOverview(name: String, age: Int, type: String, date: String, imageUrl: String, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
     ) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
+        ) {
+            Text(
+                text = name,
+                fontSize = 48.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = "Age: $age",
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        }
 
         PetImage(
             imageUrl,
             storageHelper,
             modifier = Modifier
-                .align(Alignment.TopCenter)
+                .clip(MaterialTheme.shapes.medium)
         )
 
         Card(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxHeight(0.5f)
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
         ) {
-            PetStats(name, type, date)
+            PetStats(type, date)
         }
     }
 }
@@ -101,18 +142,14 @@ fun PetImage(imageUrl: String, storageHelper: StorageHelper, modifier: Modifier 
 }
 
 @Composable
-fun PetStats(name: String, type: String, date: String) {
+fun PetStats(type: String, date: String, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .padding(0.dp, 8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = name,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(8.dp)
-        )
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -139,7 +176,8 @@ fun PetStatIcon(text: String, icon: ImageVector, color: Color, iconColor: Color,
     Column(
         modifier = Modifier
             .then(modifier),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier

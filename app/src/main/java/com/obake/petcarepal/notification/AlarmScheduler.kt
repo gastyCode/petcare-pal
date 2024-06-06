@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.getSystemService
+import com.obake.petcarepal.R
 import java.util.Calendar
 
 class AlarmScheduler(private val context: Context) {
@@ -18,6 +19,7 @@ class AlarmScheduler(private val context: Context) {
 
     fun scheduleActivity(message: String, time: Long, id: Int) {
         val intent = Intent(context, ActivityAlarmReceiver::class.java).apply {
+            putExtra("title", context.getString(R.string.planned_activity))
             putExtra("message", message)
             putExtra("id", id)
         }
@@ -55,6 +57,7 @@ class AlarmScheduler(private val context: Context) {
         }
 
         val intent = Intent(context, CalendarAlarmReceiver::class.java).apply {
+            putExtra("title", context.getString(R.string.planned_event))
             putExtra("message", message)
             putExtra("id", id)
         }

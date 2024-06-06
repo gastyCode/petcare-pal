@@ -1,5 +1,6 @@
 package com.obake.petcarepal.ui.addpet
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -12,9 +13,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
@@ -34,6 +38,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -44,6 +49,7 @@ import coil.compose.AsyncImage
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.Screen
 import com.obake.petcarepal.data.Species
+import com.obake.petcarepal.ui.components.Background
 import com.obake.petcarepal.ui.components.DropdownMenu
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.util.DateHelper
@@ -61,57 +67,80 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, storageHelper: StorageHelper,
             .fillMaxSize()
             .then(modifier)
     ) {
+        Background(modifier = Modifier.matchParentSize())
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = stringResource(id = R.string.add_pet),
-                style = MaterialTheme.typography.headlineMedium
-            )
-
-            AddPetImageInput(state.petImage, storageHelper)
-
-            AddPetTextInput(
-                label = R.string.name,
-                value = state.petName,
-                error = state.inputError,
-                onChange = addPetViewModel::setPetName
-            )
-            DropdownMenu(
-                value = state.petSpecie,
-                label = R.string.species,
-                error = state.inputError,
-                openDropdown = state.openDropdown,
-                toggleDropdown = addPetViewModel::toggleDropdown
+            Card(
+                modifier = Modifier.padding(8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
             ) {
-                Species.entries.forEach { specie ->
-                    DropdownMenuItem(
-                        text = {
-                               Text(text = stringResource(id = specie.resName))
-                        },
-                        onClick = {
-                            addPetViewModel.setPetSpecie(specie.name)
-                            addPetViewModel.toggleDropdown()
+                AddPetImageInput(state.petImage, storageHelper)
+            }
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .padding(8.dp)
+                ) {
+                    AddPetTextInput(
+                        label = R.string.name,
+                        value = state.petName,
+                        error = state.inputError,
+                        onChange = addPetViewModel::setPetName,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    DropdownMenu(
+                        value = state.petSpecie,
+                        label = R.string.species,
+                        error = state.inputError,
+                        openDropdown = state.openDropdown,
+                        toggleDropdown = addPetViewModel::toggleDropdown,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Species.entries.forEach { specie ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = stringResource(id = specie.resName))
+                                },
+                                onClick = {
+                                    addPetViewModel.setPetSpecie(specie.name)
+                                    addPetViewModel.toggleDropdown()
+                                }
+                            )
                         }
+                    }
+                    AddPetDateInput(
+                        label = R.string.date_of_birth,
+                        value = state.petBirthdate,
+                        error = state.inputError,
+                        isPickerOpen = state.openDialog,
+                        datePickerState = state.datePickerState,
+                        onChange = addPetViewModel::setPetBirthdate,
+                        toggleDialog = addPetViewModel::toggleDialog,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    AddPetButton(
+                        onClick = addPetViewModel::handleAddPet,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
             }
-            AddPetDateInput(
-                label = R.string.date_of_birth,
-                value = state.petBirthdate,
-                error = state.inputError,
-                isPickerOpen = state.openDialog,
-                datePickerState = state.datePickerState,
-                onChange = addPetViewModel::setPetBirthdate,
-                toggleDialog = addPetViewModel::toggleDialog
-            )
-            AddPetButton(onClick = addPetViewModel::handleAddPet)
         }
     }
 }
 
-// TODO: Adding more pets
 // From Medium: https://readmedium.com/en/https:/medium.com/@cherfaoui_dev/easy-image-picking-no-permissions-required-using-jetpack-compose-733c17163369
 @Composable
 fun AddPetImageInput(imageName: String, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
@@ -139,13 +168,16 @@ fun AddPetImageInput(imageName: String, storageHelper: StorageHelper, modifier: 
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .aspectRatio(1f)
+                .clip(MaterialTheme.shapes.medium)
                 .clickable { launcher.launch(arrayOf("image/*")) }
         )
         Button(
             onClick = {
                 launcher.launch(arrayOf("image/*"))
             },
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier
+                .padding(4.dp)
+                .align(Alignment.BottomCenter)
         ) {
             Text(text = "Pick Image")
         }
@@ -174,7 +206,7 @@ fun AddPetTextInput(
     value: String,
     error: Boolean = false,
     onChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
     TextField(
         label = { Text(text = stringResource(id = label)) },
@@ -196,9 +228,8 @@ fun AddPetDateInput(
     error: Boolean = false,
     onChange: (String) -> Unit,
     toggleDialog: () -> Unit,
-    modifier: Modifier = Modifier
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
-    // TODO: Add click to TextField
     TextField(
         label = { Text(text = stringResource(id = label)) },
         value = value,

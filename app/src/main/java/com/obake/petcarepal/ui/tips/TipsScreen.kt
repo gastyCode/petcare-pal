@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.model.Pet
+import com.obake.petcarepal.ui.components.Background
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
 
 @Composable
@@ -38,12 +39,7 @@ fun TipsScreen(tipsViewModel: TipsViewModel, modifier: Modifier = Modifier) {
             .fillMaxSize()
             .then(modifier)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.bg),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
-        )
+        Background(modifier = Modifier.matchParentSize())
         tip?.let {
             TipCard(
                 title = it.title,
