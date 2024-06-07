@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.obake.petcarepal.data.ApplicationDatabase
-import com.obake.petcarepal.ui.theme.PetCarePalTheme
 import com.obake.petcarepal.ui.splash.SplashScreen
 import com.obake.petcarepal.ui.splash.SplashViewModel
+import com.obake.petcarepal.ui.theme.PetCarePalTheme
 
 
 @SuppressLint("CustomSplashScreen")

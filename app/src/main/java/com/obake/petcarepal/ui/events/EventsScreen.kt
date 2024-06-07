@@ -1,6 +1,9 @@
 package com.obake.petcarepal.ui.events
 
-import androidx.compose.foundation.Image
+import android.app.AlarmManager
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,11 +11,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,14 +34,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import com.obake.petcarepal.R
 import com.obake.petcarepal.data.model.Event
 import com.obake.petcarepal.ui.components.AddItemButton
@@ -55,21 +54,35 @@ import java.util.Calendar
 @Composable
 fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier) {
     val state = eventsViewModel.state
-    val calendarState = rememberDatePickerState(initialSelectedDateMillis = Calendar.getInstance().timeInMillis)
+    val calendar = Calendar.getInstance()
+    val calendarState = rememberDatePickerState(initialSelectedDateMillis = calendar.timeInMillis)
+    val timePickerState = rememberTimePickerState(initialHour = calendar.get(Calendar.HOUR_OF_DAY), initialMinute = calendar.get(Calendar.MINUTE))
 
     var openDialog by rememberSaveable { mutableStateOf(false) }
     var calendarVisible by rememberSaveable { mutableStateOf(true) }
 
     eventsViewModel.updateEvents(DateHelper.dateStateToDate(calendarState))
 
+    val context = LocalContext.current
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val alarmManager = context.getSystemService<AlarmManager>()!!
+        when {
+            !alarmManager.canScheduleExactAlarms() -> {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(intent)
+            }
+        }
+    }
+
     AddItemDialog(
         openDialog = openDialog,
         nameValue = state.eventName,
         nameLabel = R.string.event_name,
         titleLabel = R.string.add_event,
-        timePickerState = state.timePickerState,
+        timePickerState = timePickerState,
         onAdd = {
-            eventsViewModel.insert(state.eventName, calendarState)
+            eventsViewModel.insert(state.eventName, timePickerState, calendarState)
             openDialog = false
                 },
         toggleDialog = { openDialog = !openDialog },
@@ -114,7 +127,6 @@ fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier
                     state.events,
                     eventsViewModel::delete,
                     {
-                        eventsViewModel.updateTimePickerState()
                         openDialog = !openDialog
                     }
                 )

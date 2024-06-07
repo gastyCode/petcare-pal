@@ -47,7 +47,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.obake.petcarepal.R
-import com.obake.petcarepal.data.Screen
 import com.obake.petcarepal.data.Species
 import com.obake.petcarepal.ui.components.Background
 import com.obake.petcarepal.ui.components.DropdownMenu

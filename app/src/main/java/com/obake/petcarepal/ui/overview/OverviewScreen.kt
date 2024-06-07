@@ -1,16 +1,12 @@
 package com.obake.petcarepal.ui.overview
 
 import android.net.Uri
-import android.util.Log
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,9 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,22 +33,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.obake.petcarepal.R
 import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.ui.components.Background
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
-import com.obake.petcarepal.util.DateHelper
 import com.obake.petcarepal.util.StorageHelper
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Formatter
 
 @Composable
 fun OverviewScreen(pet: Pet, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
@@ -93,7 +81,7 @@ fun PetOverview(name: String, age: Int, type: String, date: String, imageUrl: St
         ) {
             Text(
                 text = name,
-                fontSize = 48.sp,
+                style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Text(

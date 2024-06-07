@@ -4,14 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 
-class CalendarAlarmReceiver : BroadcastReceiver() {
+class EventAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
-        val calendarNotificationService = CalendarNotificationService(context)
+        val eventNotificationService = EventNotificationService(context)
         val title = intent?.getStringExtra("title") ?: return
         val message = intent.getStringExtra("message") ?: return
         val id = intent.getIntExtra("id", 0)
 
-        calendarNotificationService.showNotification(title, message, id)
+        eventNotificationService.showNotification(title, message, id)
     }
 }

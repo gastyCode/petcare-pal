@@ -19,8 +19,8 @@ import com.obake.petcarepal.ui.activities.ActivitiesScreen
 import com.obake.petcarepal.ui.activities.ActivitiesViewModel
 import com.obake.petcarepal.ui.addpet.AddPetScreen
 import com.obake.petcarepal.ui.addpet.AddPetViewModel
-import com.obake.petcarepal.ui.events.EventsScreen
 import com.obake.petcarepal.ui.components.Navigation
+import com.obake.petcarepal.ui.events.EventsScreen
 import com.obake.petcarepal.ui.events.EventsViewModel
 import com.obake.petcarepal.ui.overview.OverviewScreen
 import com.obake.petcarepal.ui.theme.PetCarePalTheme

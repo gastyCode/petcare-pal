@@ -6,10 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.provider.AlarmClock
 import android.provider.Settings
 import android.util.Log
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.getSystemService
 import com.obake.petcarepal.R
 import java.util.Calendar
@@ -45,25 +43,17 @@ class AlarmScheduler(private val context: Context) {
         )
     }
 
-    @SuppressLint("ScheduleExactAlarm")
     fun scheduleEvent(message: String, time: Long, id: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager = context.getSystemService<AlarmManager>()!!
-            when {
-                !alarmManager.canScheduleExactAlarms() -> {
-                    context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
-                }
-            }
-        }
-
-        val intent = Intent(context, CalendarAlarmReceiver::class.java).apply {
+        val intent = Intent(context, EventAlarmReceiver::class.java).apply {
             putExtra("title", context.getString(R.string.planned_event))
             putExtra("message", message)
             putExtra("id", id)
         }
-        alarmManager.setExactAndAllowWhileIdle(
+
+        alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             time,
+            AlarmManager.INTERVAL_DAY,
             PendingIntent.getBroadcast(
                 context,
                 id,
@@ -89,7 +79,7 @@ class AlarmScheduler(private val context: Context) {
             PendingIntent.getBroadcast(
                 context,
                 id,
-                Intent(context, CalendarAlarmReceiver::class.java),
+                Intent(context, EventAlarmReceiver::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )

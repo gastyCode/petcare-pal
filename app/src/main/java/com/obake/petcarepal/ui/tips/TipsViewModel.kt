@@ -3,15 +3,12 @@ package com.obake.petcarepal.ui.tips
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.obake.petcarepal.data.dao.PetDao
 import com.obake.petcarepal.data.dao.TipDao
 import com.obake.petcarepal.data.model.Pet
 import com.obake.petcarepal.data.model.Tip
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class TipsViewModel(private val tipDao: TipDao, pet: Pet): ViewModel() {
