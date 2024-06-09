@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.0")
     implementation("androidx.compose.runtime:runtime-livedata")
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.glance.appwidget)
 
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")

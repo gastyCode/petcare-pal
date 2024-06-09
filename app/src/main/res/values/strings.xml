@@ -18,6 +18,9 @@
     <string name="planned_events">Planned Events</string>
     <string name="planned_activity">Planned Activity</string>
     <string name="planned_activities">Planned Activities</string>
+    <string name="pet_overview">Pet Overview</string>
+    <string name="launch_app">Launch App</string>
+    <string name="widget_description">Widget, that shows basic information about your pet.</string>
     // Notification channels
     <string name="activity_channel_name">Activity</string>
     <string name="activity_channel_desc">Used for activity notifications.</string>

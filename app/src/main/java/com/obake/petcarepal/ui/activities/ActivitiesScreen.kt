@@ -14,7 +14,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,25 +33,40 @@ import com.obake.petcarepal.ui.components.AddItemWithIconDialog
 import com.obake.petcarepal.ui.components.Background
 import com.obake.petcarepal.ui.components.ItemCard
 import com.obake.petcarepal.ui.theme.PetCarePalTheme
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifier = Modifier) {
     val state = activitiesViewModel.state
+    val calendar = Calendar.getInstance()
+    val timePickerState = rememberTimePickerState(initialHour = calendar.get(Calendar.HOUR_OF_DAY), initialMinute = calendar.get(Calendar.MINUTE))
+
+    var openDialog by remember { mutableStateOf(false) }
+    var openDropdown by remember { mutableStateOf(false) }
+    var activityName by remember { mutableStateOf("") }
+    var activityType by remember { mutableStateOf("") }
+    var activityIcon by remember { mutableIntStateOf(0) }
     
     AddItemWithIconDialog(
-        openDialog = state.openDialog,
-        openDropdown = state.openDropdown,
-        nameValue = state.activityName,
-        iconValue = state.activityType,
+        openDialog = openDialog,
+        openDropdown = openDropdown,
+        nameValue = activityName,
+        iconValue = activityType,
         nameLabel =  R.string.activity_name,
         titleLabel = R.string.add_activity,
-        timePickerState = state.timePickerState,
-        onAdd = { activitiesViewModel.insert(state.activityName, state.activityType, state.activityIcon) },
-        toggleDialog = activitiesViewModel::toggleDialog,
-        toggleDropdown = activitiesViewModel::toggleDropdown,
-        onNameChange = activitiesViewModel::setActivityName,
-        onIconChange = activitiesViewModel::setActivityIcon
+        timePickerState = timePickerState,
+        onAdd = {
+            activitiesViewModel.insert(activityName, activityType, activityIcon, timePickerState)
+            openDialog = false
+                },
+        toggleDialog = { openDialog = !openDialog },
+        toggleDropdown = { openDropdown = !openDropdown },
+        onNameChange = { activityName = it },
+        onIconChange = { type, icon ->
+            activityType = type
+            activityIcon = icon
+        }
     )
 
     Box(
@@ -61,7 +82,7 @@ fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifie
             ActivityList(
                 state.activities,
                 activitiesViewModel::delete,
-                activitiesViewModel::toggleDialog,
+                { openDialog = !openDialog },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)

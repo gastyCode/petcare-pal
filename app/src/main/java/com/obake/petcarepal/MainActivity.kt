@@ -16,8 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var pet: Pet? = null
-        pet = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val pet = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra("pet", Pet::class.java)
         } else {
             intent.getParcelableExtra("pet") as? Pet

@@ -13,7 +13,6 @@ import com.obake.petcarepal.data.model.Activity
 import com.obake.petcarepal.notification.AlarmScheduler
 import com.obake.petcarepal.util.DateHelper
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 class ActivitiesViewModel(private val activityDao: ActivityDao, private val alarmScheduler: AlarmScheduler): ViewModel() {
@@ -24,40 +23,10 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val alar
         viewModelScope.launch {
             activityDao.getAll().asLiveData().observeForever {
                 state = state.copy(
-                    activities = it.sortedBy { a -> a.time },
-                    openDialog = false,
-                    openDropdown = false,
-                    timePickerState = state.timePickerState
+                    activities = it.sortedBy { a -> a.time }
                 )
             }
         }
-    }
-
-    fun toggleDialog() {
-        resetDialog()
-        updateTimePickerState()
-        state = state.copy(openDialog = !state.openDialog)
-    }
-
-    fun toggleDropdown() {
-        state = state.copy(openDropdown = !state.openDropdown)
-    }
-
-    fun setActivityName(name: String) {
-        state = state.copy(
-            activities = state.activities,
-            openDialog = state.openDialog,
-            activityName = name
-        )
-    }
-
-    fun setActivityIcon(type: String, icon: Int) {
-        state = state.copy(
-            activities = state.activities,
-            openDialog = state.openDialog,
-            activityType = type,
-            activityIcon = icon
-        )
     }
 
     fun delete(activity: Activity) {
@@ -67,40 +36,14 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val alar
         }
     }
 
-    fun insert(name: String, type: String, icon: Int) {
+    fun insert(name: String, type: String, icon: Int, timePickerState: TimePickerState) {
         viewModelScope.launch {
-            val time = DateHelper.timeStateToMillis(state.timePickerState)
-            val timeString = DateHelper.timeStateToTime(state.timePickerState)
+            val time = DateHelper.timeStateToMillis(timePickerState)
+            val timeString = DateHelper.timeStateToTime(timePickerState)
 
             val activity = Activity(0, name, timeString, type, icon)
             activityDao.insert(activity)
             alarmScheduler.scheduleActivity(activity.name, time, activity.hashCode())
-
-            resetDialog()
         }
-    }
-
-    private fun updateTimePickerState() {
-        val currentTime = System.currentTimeMillis()
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = currentTime
-        state = state.copy(
-            activities = state.activities,
-            openDialog = state.openDialog,
-            activityName = state.activityName,
-            timePickerState = TimePickerState(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
-        )
-    }
-
-    private fun resetDialog() {
-        state = state.copy(
-            activities = state.activities,
-            openDialog = state.openDialog,
-            openDropdown = state.openDropdown,
-            activityName = "",
-            activityType = "",
-            activityIcon = 0,
-            timePickerState = state.timePickerState
-        )
     }
 }

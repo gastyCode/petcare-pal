@@ -60,6 +60,7 @@ fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier
 
     var openDialog by rememberSaveable { mutableStateOf(false) }
     var calendarVisible by rememberSaveable { mutableStateOf(true) }
+    var eventName by rememberSaveable { mutableStateOf("") }
 
     eventsViewModel.updateEvents(DateHelper.dateStateToDate(calendarState))
 
@@ -77,16 +78,16 @@ fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier
 
     AddItemDialog(
         openDialog = openDialog,
-        nameValue = state.eventName,
+        nameValue = eventName,
         nameLabel = R.string.event_name,
         titleLabel = R.string.add_event,
         timePickerState = timePickerState,
         onAdd = {
-            eventsViewModel.insert(state.eventName, timePickerState, calendarState)
+            eventsViewModel.insert(eventName, timePickerState, calendarState)
             openDialog = false
                 },
         toggleDialog = { openDialog = !openDialog },
-        onNameChange = eventsViewModel::setEventName
+        onNameChange = { eventName = it }
     )
 
     Box(
