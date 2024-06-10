@@ -59,6 +59,7 @@ fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier
     val timePickerState = rememberTimePickerState(initialHour = calendar.get(Calendar.HOUR_OF_DAY), initialMinute = calendar.get(Calendar.MINUTE))
 
     var openDialog by rememberSaveable { mutableStateOf(false) }
+    var inputError by rememberSaveable { mutableStateOf(false) }
     var calendarVisible by rememberSaveable { mutableStateOf(true) }
     var eventName by rememberSaveable { mutableStateOf("") }
 
@@ -78,13 +79,18 @@ fun EventsScreen(eventsViewModel: EventsViewModel, modifier: Modifier = Modifier
 
     AddItemDialog(
         openDialog = openDialog,
+        inputError = inputError,
         nameValue = eventName,
         nameLabel = R.string.event_name,
         titleLabel = R.string.add_event,
         timePickerState = timePickerState,
         onAdd = {
-            eventsViewModel.insert(eventName, timePickerState, calendarState)
-            openDialog = false
+            if (eventsViewModel.handleEventAdd(eventName, timePickerState, calendarState)) {
+                inputError = false
+                openDialog = false
+            } else {
+                inputError = true
+            }
                 },
         toggleDialog = { openDialog = !openDialog },
         onNameChange = { eventName = it }

@@ -29,6 +29,14 @@ class ActivitiesViewModel(private val activityDao: ActivityDao, private val alar
         }
     }
 
+    fun handleActivityAdd(name: String, type: String, icon: Int, timePickerState: TimePickerState): Boolean {
+        if (name.isBlank() || type.isBlank()) {
+            return false
+        }
+        insert(name, type, icon, timePickerState)
+        return true
+    }
+
     fun delete(activity: Activity) {
         viewModelScope.launch {
             alarmScheduler.cancelActivity(activity.hashCode())

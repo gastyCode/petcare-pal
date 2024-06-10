@@ -180,6 +180,7 @@ fun ItemCard(
 fun AddItemWithIconDialog(
     openDialog: Boolean,
     openDropdown: Boolean,
+    inputError: Boolean,
     @StringRes nameLabel: Int,
     nameValue: String,
     iconValue: String,
@@ -209,6 +210,7 @@ fun AddItemWithIconDialog(
                 ) {
                     TextField(
                         value = nameValue,
+                        isError = inputError,
                         onValueChange = onNameChange,
                         label = { Text(stringResource(id = nameLabel)) }
                     )
@@ -254,6 +256,7 @@ fun AddItemWithIconDialog(
 @Composable
 fun AddItemDialog(
     openDialog: Boolean,
+    inputError: Boolean,
     @StringRes nameLabel: Int,
     nameValue: String,
     @StringRes titleLabel: Int,
@@ -280,6 +283,7 @@ fun AddItemDialog(
                 ) {
                     TextField(
                         value = nameValue,
+                        isError = inputError,
                         onValueChange = onNameChange,
                         label = { Text(stringResource(id = nameLabel)) }
                     )

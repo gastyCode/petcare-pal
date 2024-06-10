@@ -140,7 +140,6 @@ fun AddPetScreen(addPetViewModel: AddPetViewModel, storageHelper: StorageHelper,
     }
 }
 
-// From Medium: https://readmedium.com/en/https:/medium.com/@cherfaoui_dev/easy-image-picking-no-permissions-required-using-jetpack-compose-733c17163369
 @Composable
 fun AddPetImageInput(imageName: String, storageHelper: StorageHelper, modifier: Modifier = Modifier) {
     var imageUri: Uri? by remember { mutableStateOf(null) }

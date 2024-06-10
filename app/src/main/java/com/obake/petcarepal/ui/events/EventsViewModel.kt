@@ -28,6 +28,14 @@ class EventsViewModel(private val eventDao: EventDao, private val alarmScheduler
         }
     }
 
+    fun handleEventAdd(name: String, timePickerState: TimePickerState, datePickerState: DatePickerState): Boolean {
+        if (name.isBlank()) {
+            return false
+        }
+        insert(name, timePickerState, datePickerState)
+        return true
+    }
+
     fun insert(name: String, timePickerState: TimePickerState, datePickerState: DatePickerState) {
         viewModelScope.launch {
             val time = DateHelper.dateStateToMillis(timePickerState, datePickerState)

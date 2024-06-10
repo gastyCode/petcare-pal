@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,23 +43,29 @@ fun ActivitiesScreen(activitiesViewModel: ActivitiesViewModel, modifier: Modifie
     val calendar = Calendar.getInstance()
     val timePickerState = rememberTimePickerState(initialHour = calendar.get(Calendar.HOUR_OF_DAY), initialMinute = calendar.get(Calendar.MINUTE))
 
-    var openDialog by remember { mutableStateOf(false) }
-    var openDropdown by remember { mutableStateOf(false) }
-    var activityName by remember { mutableStateOf("") }
-    var activityType by remember { mutableStateOf("") }
-    var activityIcon by remember { mutableIntStateOf(0) }
+    var openDialog by rememberSaveable { mutableStateOf(false) }
+    var openDropdown by rememberSaveable { mutableStateOf(false) }
+    var inputError by rememberSaveable { mutableStateOf(false) }
+    var activityName by rememberSaveable { mutableStateOf("") }
+    var activityType by rememberSaveable { mutableStateOf("") }
+    var activityIcon by rememberSaveable { mutableIntStateOf(0) }
     
     AddItemWithIconDialog(
         openDialog = openDialog,
         openDropdown = openDropdown,
+        inputError = inputError,
         nameValue = activityName,
         iconValue = activityType,
         nameLabel =  R.string.activity_name,
         titleLabel = R.string.add_activity,
         timePickerState = timePickerState,
         onAdd = {
-            activitiesViewModel.insert(activityName, activityType, activityIcon, timePickerState)
-            openDialog = false
+            if (activitiesViewModel.handleActivityAdd(name = activityName, type = activityType, icon = activityIcon, timePickerState = timePickerState)) {
+                inputError = false
+                openDialog = false
+            } else {
+                inputError = true
+            }
                 },
         toggleDialog = { openDialog = !openDialog },
         toggleDropdown = { openDropdown = !openDropdown },

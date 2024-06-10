@@ -47,13 +47,8 @@ class MainActivity : ComponentActivity() {
             ActivityResultContracts.RequestPermission()
         ) {}
 
-        if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
-            // permission granted
-        } else {
-            if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)){
-                // show rationale and then launch launcher to request permission
-            } else {
-                // first request or forever denied case
+        if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+            if (!shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     launcher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
                 }
