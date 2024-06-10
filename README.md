@@ -33,6 +33,8 @@ Koncept aplikácie sa stretol s pozitívnym ohlasom u viacerých ľudí, ktorým
 
 Aplikácia teda funguje ako jednoduchý systém pre starostlivosť o domáce zviera, ktorý poskytuje nástroje na záznam každodenných aktivít, záznam udalostí, poskytuje prehľad zvieraťa a tipov na starostlivosť.
 
+Moja aplikácia sa líši v tom, že obsahuje jednoduché a intuitívne používateľské rozhranie. Toto používateľské rozhranie poskytuje všetky potrebné funkcie pre informovanie používateľa. Neobsahuje pritom zložitejšie funkcie ako napríklad kalorický príjem, váhu a podobné. Je však oproti vyššie uvedeným aplikácia mierená na viac druhov domácich zvierat a nie len psov a mačky. Z tohto dôvodu je aplikácia oproti ostatným viac osekaná a viac univerzálna.
+
 ### 1.2. Podobné aplikácie
 
 Po rozsiahlom prieskume a dôkladnej analýze dostupných aplikácií v službe Google Play som identifikoval nasledovné riešenia, ktoré sa do určitej miery zhodujú s mojou aplikáciou:
