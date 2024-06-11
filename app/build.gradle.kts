@@ -64,8 +64,8 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.datastore:datastore-preferences:1.1.0")
     implementation("androidx.compose.runtime:runtime-livedata")
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.glance.appwidget)
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.glance:glance-appwidget:1.1.0-rc01")
 
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
